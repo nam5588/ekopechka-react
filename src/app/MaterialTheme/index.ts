@@ -23,7 +23,7 @@ const light = {
 		},
 		text: {
 			primary: "#000000",
-			secondary: "#06aa29",
+			secondary: "#00a302",
 			dark: common.black,
 		},
 	},

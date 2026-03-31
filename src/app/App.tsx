@@ -4,7 +4,7 @@ import HomePage from "./screens/homePage";
 import OrdersPage from "./screens/ordersPage";
 import ProductsPage from "./screens/productsPage/index";
 import UserPage from "./screens/userPage";
-import HomeNavbar from "./components/headers/Navbar";
+import Navber from "./components/headers/Navbar";
 import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import ArticlesPage from "./screens/articlesPage";
@@ -18,7 +18,7 @@ import { Messages } from "../lib/config";
 function App() {
 	return (
 		<>
-			<HomeNavbar />
+			<Navber />
 			<Switch>
 				<Route path="/products">
 					<ProductsPage />
