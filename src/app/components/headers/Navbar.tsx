@@ -16,7 +16,7 @@ export default function Navbar() {
 					justifyContent={"space-between"}
 					className="navbar-menu">
 					<Box className="image-box">
-						<NavLink to={"/"}>
+						<NavLink to={"/home"}>
 							<img
 								className={"brand-logo"}
 								src="/icons/favicon.svg"

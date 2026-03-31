@@ -1,0 +1,596 @@
+/* ===== HOME WELCOME ===== */
+.home-welcome {
+	background: #f5f0eb;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+.welcome-inner {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	justify-content: space-between;
+	gap: 48px;
+	padding: 80px 0;
+}
+
+/* ===== TEXT ===== */
+.welcome-txt {
+	flex: 1;
+	max-width: 520px;
+}
+
+.welcome-title {
+	font-family: "Playfair Display", serif;
+	font-size: clamp(2.5rem, 5vw, 3.75rem);
+	font-weight: 800;
+	color: #1a1a1a;
+	line-height: 1.15;
+	margin: 0 0 24px 0;
+}
+
+.welcome-desc {
+	font-size: 1rem;
+	color: #555;
+	line-height: 1.75;
+	margin: 0 0 36px 0;
+	max-width: 460px;
+}
+
+/* ===== BUTTONS ===== */
+.welcome-btns {
+	display: flex;
+	flex-direction: row;
+	gap: 16px;
+}
+
+.btn-shop.MuiButton-root {
+	background: #6b8e6f !important;
+	color: #fff !important;
+	padding: 12px 28px !important;
+	border-radius: 8px !important;
+	font-size: 0.95rem !important;
+	font-weight: 600 !important;
+	text-transform: none !important;
+	box-shadow: none !important;
+	transition: background 0.2s ease !important;
+}
+
+.btn-shop.MuiButton-root:hover {
+	background: #5a7a5e !important;
+}
+
+.btn-learn.MuiButton-root {
+	background: transparent !important;
+	color: #1a1a1a !important;
+	padding: 11px 28px !important;
+	border-radius: 8px !important;
+	border: 1.5px solid #1a1a1a !important;
+	font-size: 0.95rem !important;
+	font-weight: 600 !important;
+	text-transform: none !important;
+	box-shadow: none !important;
+	transition: background 0.2s ease !important;
+}
+
+.btn-learn.MuiButton-root:hover {
+	background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ===== IMAGE ===== */
+.welcome-img-box {
+	flex: 1;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.welcome-img {
+	width: 100%;
+	max-width: 580px;
+	height: 350px;
+	object-fit: cover;
+	border-radius: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+	.welcome-inner {
+		flex-direction: column !important;
+		padding: 48px 0;
+	}
+
+	.welcome-img {
+		height: 300px;
+		max-width: 100%;
+	}
+}
+
+/* ===== STATISTICS ===== */
+.static-frame {
+	background: #ffffff;
+	padding: 72px 0;
+}
+
+.static-title {
+	font-family: "Playfair Display", serif;
+	font-size: 2.25rem;
+	font-weight: 800;
+	color: #1a1a1a;
+	text-align: center;
+	margin: 0 0 48px 0;
+}
+
+.static-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+}
+
+@media (max-width: 768px) {
+	.static-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.static-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.static-card {
+	background: #faf7f2;
+	border: 1px solid #ece8e1;
+	border-radius: 16px;
+	padding: 36px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.static-value {
+	font-family: "Playfair Display", serif;
+	font-size: 2.25rem;
+	font-weight: 700;
+	color: #6b8e6f;
+	line-height: 1;
+}
+
+.static-label {
+	font-size: 0.95rem;
+	color: #555;
+}
+
+/* ===== POPULAR PRODUCTS ===== */
+.popular-frame {
+	background: #f5f0eb;
+	padding: 72px 0;
+}
+
+.popular-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 36px;
+}
+
+.popular-title {
+	font-family: "Playfair Display", serif;
+	font-size: 2rem;
+	font-weight: 800;
+	color: #1a1a1a;
+	margin: 0;
+}
+
+.popular-view-all {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #6b8e6f;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+}
+
+.popular-view-all:hover {
+	opacity: 0.75;
+}
+
+/* ===== GRID ===== */
+.popular-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+}
+
+@media (max-width: 1024px) {
+	.popular-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.popular-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ===== CARD ===== */
+.product-card {
+	background: #fff;
+	border-radius: 16px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+.product-card:hover {
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== IMAGE ===== */
+.product-img-wrap {
+	position: relative;
+	width: 100%;
+	height: 220px;
+	overflow: hidden;
+}
+
+.product-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.product-wish-btn {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background: #fff;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+	transition: background 0.2s ease;
+}
+
+.product-wish-btn:hover {
+	background: #fef2f2;
+}
+
+.product-wish-icon {
+	font-size: 1.1rem !important;
+	color: #e57373;
+}
+
+/* ===== BODY ===== */
+.product-body {
+	padding: 18px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.product-name {
+	font-family: "Playfair Display", serif;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 6px 0;
+}
+
+.product-desc {
+	font-size: 0.875rem;
+	color: #777;
+	margin: 0 0 14px 0;
+	line-height: 1.5;
+}
+
+.product-price-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.product-price {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: #6b8e6f;
+}
+
+.product-rating {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #555;
+}
+
+.star-icon {
+	font-size: 1rem !important;
+	color: #e07b4f;
+}
+
+.product-meta {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.product-meta-item {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 0.8rem;
+	color: #999;
+}
+
+.product-meta-item svg {
+	font-size: 0.95rem !important;
+}
+
+/* ===== ADD TO CART BUTTON ===== */
+.product-add-btn.MuiButton-root {
+	background: #6b8e6f !important;
+	color: #fff !important;
+	border-radius: 10px !important;
+	padding: 10px !important;
+	font-size: 0.875rem !important;
+	font-weight: 600 !important;
+	text-transform: none !important;
+	box-shadow: none !important;
+	margin-top: auto;
+	transition: background 0.2s ease !important;
+}
+
+.product-add-btn.MuiButton-root:hover {
+	background: #5a7a5e !important;
+}
+
+/* ===== NEW POPULAR PRODUCTS ===== */
+.new-products-frame {
+	background: #f5f0eb;
+	padding: 72px 0;
+}
+
+/* ===== SERVICES ===== */
+.service-frame {
+	background: #fff;
+	padding: 72px 0;
+}
+
+.service-title {
+	font-family: "Playfair Display", serif;
+	font-size: 2.25rem;
+	font-weight: 800;
+	color: #1a1a1a;
+	text-align: center;
+	margin: 0 0 48px 0;
+}
+
+.service-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+}
+
+@media (max-width: 1024px) {
+	.service-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.service-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.service-card {
+	background: #faf7f2;
+	border: 1px solid #ece8e1;
+	border-radius: 16px;
+	padding: 36px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 14px;
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+.service-card:hover {
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+	transform: translateY(-2px);
+}
+
+.service-icon {
+	font-size: 2.25rem;
+	line-height: 1;
+}
+
+.service-name {
+	font-family: "Playfair Display", serif;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0;
+}
+
+.service-desc {
+	font-size: 0.875rem;
+	color: #777;
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* ===== EVENTS / ARTICLES ===== */
+.events-frame {
+	background: #fff;
+	padding: 72px 0;
+}
+
+.events-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 36px;
+}
+
+.events-title {
+	font-family: "Playfair Display", serif;
+	font-size: 2rem;
+	font-weight: 800;
+	color: #1a1a1a;
+	margin: 0;
+}
+
+.events-read-all {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #6b8e6f;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+}
+
+.events-read-all:hover {
+	opacity: 0.75;
+}
+
+/* ===== GRID ===== */
+.events-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+}
+
+@media (max-width: 1024px) {
+	.events-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 600px) {
+	.events-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ===== CARD ===== */
+.article-card {
+	background: #fff;
+	border-radius: 16px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+	cursor: pointer;
+}
+
+.article-card:hover {
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.11);
+	transform: translateY(-2px);
+}
+
+/* ===== IMAGE ===== */
+.article-img-wrap {
+	width: 100%;
+	height: 230px;
+	overflow: hidden;
+	background: #e8e8e8;
+}
+
+.article-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.article-card:hover .article-img {
+	transform: scale(1.03);
+}
+
+/* ===== BODY ===== */
+.article-body {
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex: 1;
+}
+
+.article-category {
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: #6b8e6f;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.article-name {
+	font-family: "Playfair Display", serif;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0;
+	line-height: 1.4;
+}
+
+.article-desc {
+	font-size: 0.875rem;
+	color: #777;
+	margin: 0;
+	line-height: 1.6;
+}
+
+.article-author-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 4px;
+}
+
+.article-author {
+	font-size: 0.8rem;
+	color: #555;
+}
+
+.article-date {
+	font-size: 0.8rem;
+	color: #aaa;
+}
+
+.article-meta {
+	display: flex;
+	gap: 16px;
+	padding-top: 10px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.article-meta-item {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 0.8rem;
+	color: #aaa;
+}
+
+.article-meta-item svg {
+	font-size: 0.95rem !important;
+}

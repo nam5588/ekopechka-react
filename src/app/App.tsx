@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { NavLink, Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import OrdersPage from "./screens/ordersPage";
 import ProductsPage from "./screens/productsPage/index";
@@ -14,6 +14,7 @@ import "../css/footer.css";
 
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
+import { Box, Button, Container, Stack } from "@mui/material";
 
 function App() {
 	return (
@@ -29,7 +30,7 @@ function App() {
 				<Route path="/orders">
 					<OrdersPage />
 				</Route>
-				<Route path="/member-page">
+				<Route path="/my-page">
 					<UserPage />
 				</Route>
 				<Route path="/help">

@@ -1,0 +1,271 @@
+/* ===== HERO ===== */
+.help-hero {
+	background: linear-gradient(135deg, #6b8e6f 0%, #c97c5c 100%);
+	padding: 40px 32px;
+}
+
+.help-hero-title {
+	font-family: "Playfair Display", serif;
+	font-size: 2rem;
+	font-weight: 800;
+	color: #fff;
+	margin: 0 0 6px 0;
+}
+
+.help-hero-desc {
+	font-size: 0.95rem;
+	color: rgba(255, 255, 255, 0.85);
+	margin: 0;
+}
+
+/* ===== CONTENT ===== */
+.help-content {
+	background: #f5f0eb;
+	min-height: 100vh;
+	padding: 0 32px 72px;
+	margin: 0 auto;
+}
+
+/* ===== TABS ===== */
+.help-tabs {
+	display: flex;
+	gap: 0;
+	border-bottom: 2px solid #e5e5e5;
+	margin-bottom: 40px;
+}
+
+.help-tab {
+	padding: 16px 24px;
+	background: none;
+	border: none;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #888;
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -2px;
+	transition:
+		color 0.2s ease,
+		border-color 0.2s ease;
+}
+
+.help-tab:hover {
+	color: #6b8e6f;
+}
+
+.help-tab.active {
+	color: #6b8e6f;
+	font-weight: 700;
+	border-bottom-color: #6b8e6f;
+}
+
+/* ===== SECTION TITLE ===== */
+.help-section-title {
+	font-family: "Playfair Display", serif;
+	font-size: 1.75rem;
+	font-weight: 800;
+	color: #1a1a1a;
+	text-align: center;
+	margin: 0 0 32px 0;
+}
+
+/* ===== FAQ ===== */
+.faq-list {
+	max-width: 700px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.faq-item {
+	background: #fff;
+	border-radius: 14px;
+	padding: 18px 22px;
+	cursor: pointer;
+	border: 1px solid #ece8e1;
+	transition: box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+.faq-question {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-family: "Playfair Display", serif;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #1a1a1a;
+}
+
+.faq-question svg {
+	color: #6b8e6f;
+	flex-shrink: 0;
+}
+
+.faq-answer {
+	margin-top: 12px;
+	font-size: 0.875rem;
+	color: #666;
+	line-height: 1.7;
+	border-top: 1px solid #f0ede8;
+	padding-top: 12px;
+}
+
+/* ===== TERMS ===== */
+.help-terms {
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+.help-terms-intro {
+	font-size: 0.875rem;
+	color: #888;
+	text-align: center;
+	margin: -16px 0 28px;
+}
+
+.terms-list {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.terms-item {
+	background: #fff;
+	border-radius: 12px;
+	padding: 20px 24px;
+	border: 1px solid #ece8e1;
+}
+
+.terms-item-title {
+	font-family: "Playfair Display", serif;
+	font-size: 1rem;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 8px 0;
+}
+
+.terms-item-text {
+	font-size: 0.875rem;
+	color: #666;
+	line-height: 1.7;
+	margin: 0;
+}
+
+/* ===== CONTACT ===== */
+.contact-layout {
+	display: grid;
+	grid-template-columns: 1fr 1.5fr;
+	gap: 32px;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+	.contact-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.contact-info {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.contact-info-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.contact-info-item svg {
+	color: #6b8e6f;
+	margin-top: 2px;
+	flex-shrink: 0;
+}
+
+.contact-info-label {
+	font-size: 0.78rem;
+	color: #aaa;
+	margin: 0 0 2px 0;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.contact-info-value {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0;
+}
+
+/* ===== CONTACT FORM ===== */
+.contact-form {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.contact-form-field {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.contact-form-label {
+	font-size: 0.8rem;
+	color: #888;
+	font-weight: 500;
+}
+
+.contact-form-input,
+.contact-form-textarea {
+	padding: 10px 14px;
+	border: 1px solid #e5e5e5;
+	border-radius: 10px;
+	font-size: 0.875rem;
+	color: #1a1a1a;
+	background: #fff;
+	outline: none;
+	font-family: inherit;
+	transition: border-color 0.2s ease;
+	resize: none;
+}
+
+.contact-form-input:focus,
+.contact-form-textarea:focus {
+	border-color: #6b8e6f;
+}
+
+.contact-submit-btn {
+	padding: 13px;
+	background: #6b8e6f;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease;
+	margin-top: 4px;
+}
+
+.contact-submit-btn:hover {
+	background: #5a7a5e;
+}
+
+.contact-success {
+	background: rgba(107, 142, 111, 0.1);
+	border: 1px solid #6b8e6f;
+	border-radius: 12px;
+	padding: 20px;
+	text-align: center;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #4a7a4e;
+}

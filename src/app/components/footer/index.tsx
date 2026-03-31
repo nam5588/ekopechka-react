@@ -4,8 +4,6 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const Footers = styled.footer`
-	position: absolute;
-	bottom: 0px;
 	width: 100%;
 	background: #343434;
 `;
