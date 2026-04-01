@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Container } from "@mui/material";
-import { FavoriteBorder, Star, Visibility } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
-import ArticleCard from "../../components/cards/articleCard";
+import { Container, Pagination, PaginationItem, Stack } from "@mui/material";
 import ArticleListCard from "../../components/cards/articleListCard";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const categories = ["All", "Events", "News", "Advice", "Fuels", "Others"];
 const allArticles = [
@@ -103,6 +102,22 @@ export default function Articles() {
 						{filtered.map((article) => (
 							<ArticleListCard key={article.id} {...article} />
 						))}
+						<Stack className="pagination-section">
+							<Pagination
+								count={allArticles.length !== 0 ? 4 : 8}
+								page={1}
+								renderItem={(item) => (
+									<PaginationItem
+										components={{
+											previous: ArrowBackIcon,
+											next: ArrowForwardIcon,
+										}}
+										{...item}
+										// color="primary"
+									/>
+								)}
+							/>
+						</Stack>
 					</div>
 				</Container>
 			</div>

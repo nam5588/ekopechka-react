@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Container } from "@mui/material";
-import { FavoriteBorder, Star, Visibility } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { Container, Pagination, PaginationItem, Stack } from "@mui/material";
 import ProductCard from "../../components/cards/productCars";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const categories = ["All", "Stoves", "Boilers", "Fuels", "Others"];
+const order = ["All", "Price", "View", "Like", "New"];
 
 const allProducts = [
 	{
@@ -120,6 +121,19 @@ export default function Products() {
 									))}
 								</ul>
 							</div>
+							<div className="sidebar-section">
+								<p className="sidebar-label">Order</p>
+								<ul className="sidebar-categories">
+									{order.map((cat) => (
+										<li
+											key={cat}
+											className={`sidebar-cat-item ${activeCategory === cat ? "active" : ""}`}
+											onClick={() => setActiveCategory(cat)}>
+											{cat}
+										</li>
+									))}
+								</ul>
+							</div>
 						</aside>
 
 						{/* Products */}
@@ -131,6 +145,22 @@ export default function Products() {
 								{filtered.map((product) => (
 									<ProductCard key={product.id} {...product} />
 								))}
+								<Stack className="pagination-section">
+									<Pagination
+										count={allProducts.length !== 0 ? 4 : 8}
+										page={1}
+										renderItem={(item) => (
+											<PaginationItem
+												components={{
+													previous: ArrowBackIcon,
+													next: ArrowForwardIcon,
+												}}
+												{...item}
+												// color="primary"
+											/>
+										)}
+									/>
+								</Stack>
 							</div>
 						</div>
 					</div>
