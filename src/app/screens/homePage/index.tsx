@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ProductService from "../../services/ProductService";
 import { Box, Button, Container, Stack } from "@mui/material";
 
 import "../../../css/home.css";
@@ -8,9 +9,70 @@ import PopularProducts from "./PopularProducts";
 import NewProducts from "./NewProducts";
 import Events from "./Events";
 import { NavLink } from "react-router-dom";
+import { ProductType } from "../../../lib/enums/product.enum";
+import { Product } from "../../../lib/types/products";
+import { Article } from "../../../lib/types/article";
+import {
+	setNewProducts,
+	setPopularArticles,
+	setPopularProducts,
+} from "./slice";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import ArticleService from "../../services/ArticleService";
+
+/** REDUX SLICE & SELECTOR **/
+const actionDispatch = (dispatch: Dispatch) => ({
+	setPopularProducts: (data: Product[]) => dispatch(setPopularProducts(data)),
+	setNewProducts: (data: Product[]) => dispatch(setNewProducts(data)),
+	setPopularArticles: (data: Article[]) => dispatch(setPopularArticles(data)),
+});
 
 export default function HomePage() {
 	const authMember = false;
+
+	const { setPopularProducts, setNewProducts, setPopularArticles } =
+		actionDispatch(useDispatch());
+
+	useEffect(() => {
+		const product = new ProductService();
+		product
+			.getProducts({
+				page: 1,
+				limit: 4,
+				order: "productViews",
+				productType: ProductType.STOVE,
+			})
+			.then((data) => {
+				setPopularProducts(data);
+			})
+			.catch((err) => console.log(err));
+
+		product
+			.getProducts({
+				page: 1,
+				limit: 4,
+				order: "createdAt",
+				productType: ProductType.STOVE,
+			})
+			.then((data) => {
+				setNewProducts(data);
+			})
+			.catch((err) => console.log(err));
+
+		const article = new ArticleService();
+		article
+			.getArticles({
+				page: 1,
+				limit: 3,
+				order: "articleViews",
+			})
+			.then((data) => {
+				setPopularArticles(data);
+			})
+			.catch((err) => console.log(err));
+	});
+
 	return (
 		<div>
 			<div className="home-welcome">

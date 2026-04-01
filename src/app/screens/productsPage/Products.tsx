@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Pagination, PaginationItem, Stack } from "@mui/material";
-import ProductCard from "../../components/cards/productCars";
+import ProductCard from "../../components/cards/productCard";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -142,9 +142,9 @@ export default function Products() {
 								Available Products ({filtered.length})
 							</h2>
 							<div className="products-grid">
-								{filtered.map((product) => (
-									<ProductCard key={product.id} {...product} />
-								))}
+								{/* {filtered.map((product) => (
+									// <ProductCard key={product.id} {...product} />
+								))} */}
 								<Stack className="pagination-section">
 									<Pagination
 										count={allProducts.length !== 0 ? 4 : 8}

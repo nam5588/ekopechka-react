@@ -1,58 +1,28 @@
 import React from "react";
-import { Container, Button } from "@mui/material";
+import { Button, Container } from "@mui/material";
+import { NavLink } from "react-router-dom";
+
+import { createSelector } from "@reduxjs/toolkit";
+import { retrievePopularProducts } from "./selector";
+import { useSelector } from "react-redux";
 import {
 	Favorite,
 	FavoriteBorder,
 	Star,
 	Visibility,
 } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
-import ProductCard from "../../components/cards/productCars";
+import { serverApi } from "../../../lib/config";
 
-const products = [
-	{
-		id: 1,
-		name: "Organic Cotton T-Shirt",
-		desc: "Comfortable and sustainable cotton t-shirt",
-		price: 29.99,
-		rating: 4.8,
-		likes: 234,
-		views: 1205,
-		img: "/img/product1.jpg",
-	},
-	{
-		id: 2,
-		name: "Bamboo Water Bottle",
-		desc: "Eco-friendly water bottle made from sustainable bamboo",
-		price: 24.99,
-		rating: 4.9,
-		likes: 456,
-		views: 2341,
-		img: "/img/product2.jpg",
-	},
-	{
-		id: 3,
-		name: "Recycled Plastic Bag",
-		desc: "Durable bag made from 100% recycled plastic",
-		price: 34.99,
-		rating: 4.6,
-		likes: 189,
-		views: 876,
-		img: "/img/product3.jpg",
-	},
-	{
-		id: 4,
-		name: "Natural Soap Set",
-		desc: "Hand-made soap from natural ingredients",
-		price: 19.99,
-		rating: 4.7,
-		likes: 312,
-		views: 1543,
-		img: "/img/product4.jpg",
-	},
-];
+/** REDUX SLICE & SELECTOR **/
+const popularProductRetriever = createSelector(
+	retrievePopularProducts,
+	(popularProducts) => ({ popularProducts }),
+);
 
 export default function PopularProducts() {
+	const { popularProducts } = useSelector(popularProductRetriever);
+	const favLike: boolean = true;
+
 	return (
 		<div className="popular-frame">
 			<Container>
@@ -63,12 +33,51 @@ export default function PopularProducts() {
 						View All →
 					</NavLink>
 				</div>
-
-				{/* Grid */}
 				<div className="popular-grid">
-					{products.map((product) => (
-						<ProductCard key={product.id} {...product} />
-					))}
+					{popularProducts.map((product) => {
+						const imagePath = `${serverApi}/${product.productImages[0]}`;
+						return (
+							<div key={product._id} className="product-card">
+								<div className="product-img-wrap">
+									<img
+										src={imagePath}
+										alt={product.productName}
+										className="product-img"
+									/>
+									<button className="product-wish-btn">
+										{favLike ? (
+											<Favorite className="product-wish-icon" />
+										) : (
+											<FavoriteBorder className="product-wish-icon" />
+										)}
+									</button>
+								</div>
+								<div className="product-body">
+									<h3 className="product-name">{product.productName}</h3>
+									<p className="product-desc">{product.productDesc}</p>
+									<div className="product-price-row">
+										<span className="product-price">
+											${product.productPrice}
+										</span>
+										<span className="product-rating">
+											<Star className="star-icon" />
+										</span>
+									</div>
+									<div className="product-meta">
+										<span className="product-meta-item">
+											<FavoriteBorder fontSize="small" /> {product.productLikes}
+										</span>
+										<span className="product-meta-item">
+											<Visibility fontSize="small" /> {product.productViews}
+										</span>
+									</div>
+									<Button className="product-add-btn" fullWidth>
+										Add to Cart
+									</Button>
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			</Container>
 		</div>

@@ -531,6 +531,7 @@
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 	gap: 10px;
 	flex: 1;
 }
@@ -593,4 +594,8 @@
 
 .article-meta-item svg {
 	font-size: 0.95rem !important;
+}
+
+.article-desc {
+	justify-content: end;
 }

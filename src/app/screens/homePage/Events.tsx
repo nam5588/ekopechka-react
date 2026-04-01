@@ -1,46 +1,21 @@
 import React from "react";
 import { Container } from "@mui/material";
-import { FavoriteBorder, Visibility } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
-import ArticleCard from "../../components/cards/articleCard";
+import { FavoriteBorder, Visibility } from "@mui/icons-material";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrievePopularArticles } from "./selector";
+import { useSelector } from "react-redux";
+import { serverApi } from "../../../lib/config";
 
-const articles = [
-	{
-		id: 1,
-		category: "Fashion",
-		title: "The Impact of Sustainable Fashion",
-		desc: "Learn how sustainable fashion is changing the industry",
-		author: "Sarah Johnson",
-		date: "2024-03-20",
-		likes: 456,
-		views: 2341,
-		img: "/img/article1.jpg",
-	},
-	{
-		id: 2,
-		category: "Lifestyle",
-		title: "Zero Waste Living: A Beginner's Guide",
-		desc: "Start your zero waste journey with these practical tips",
-		author: "Michael Chen",
-		date: "2024-03-18",
-		likes: 678,
-		views: 3456,
-		img: "/img/article2.jpg",
-	},
-	{
-		id: 3,
-		category: "Technology",
-		title: "Renewable Energy Solutions for Your Home",
-		desc: "Explore renewable energy options for sustainable living",
-		author: "Emma Wilson",
-		date: "2024-03-15",
-		likes: 534,
-		views: 2876,
-		img: "/img/article3.jpg",
-	},
-];
+/** REDUX SLICE & SELECTOR **/
+const popularArticleRetriever = createSelector(
+	retrievePopularArticles,
+	(popularArticles) => ({ popularArticles }),
+);
 
 export default function Events() {
+	const { popularArticles } = useSelector(popularArticleRetriever);
+
 	return (
 		<div className="events-frame">
 			<Container>
@@ -54,9 +29,50 @@ export default function Events() {
 
 				{/* Grid */}
 				<div className="events-grid">
-					{articles.map((article) => (
-						<ArticleCard key={article.id} {...article} />
-					))}
+					{popularArticles.map((article) => {
+						const date = new Date(article.createdAt).toLocaleString("en-GB", {
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit",
+							hour: "2-digit",
+							minute: "2-digit",
+						});
+
+						return (
+							<div id={article._id} className="article-card">
+								<div className="article-img-wrap">
+									<img
+										src={`${serverApi}/${article.articleImage}`}
+										alt={""}
+										className="article-img"
+									/>
+								</div>
+								<div className="article-body">
+									<span className="article-category">
+										{article.articleCategory}
+									</span>
+									<h3 className="article-name">{article.articleTitle}</h3>
+									<p className="article-desc">
+										{article.articleContent.slice(0, 100) + "..."}
+									</p>
+									<div className="article-desc">
+										<div className="article-author-row">
+											<span className="article-date">{date}</span>
+										</div>
+										<div className="article-meta">
+											<span className="article-meta-item">
+												<FavoriteBorder fontSize="small" />
+												{article.articleLikes}
+											</span>
+											<span className="article-meta-item">
+												<Visibility fontSize="small" /> {article.articleViews}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			</Container>
 		</div>
