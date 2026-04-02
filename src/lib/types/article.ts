@@ -1,10 +1,10 @@
-import { ArticleCategoty, ArticleStatus } from "../enums/article.enum";
+import { ArticleCategory, ArticleStatus } from "../enums/article.enum";
 
 export interface Article {
 	_id: string;
 	articleTitle: string;
 	articleContent: string;
-	articleCategory: ArticleCategoty;
+	articleCategory: ArticleCategory;
 	articleStatus: ArticleStatus;
 	articleImage: string;
 	articleVideo: string;
@@ -18,6 +18,6 @@ export interface ArticleInquiry {
 	order: string;
 	page: number;
 	limit: number;
-	articleCategoty?: ArticleCategoty;
+	articleCategory?: ArticleCategory;
 	search?: string;
 }

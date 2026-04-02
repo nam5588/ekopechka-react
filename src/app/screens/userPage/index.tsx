@@ -2,44 +2,108 @@ import React, { useState } from "react";
 import { Button, Container } from "@mui/material";
 import {
 	PersonOutline,
-	MailOutline,
 	PhoneOutlined,
 	LocationOnOutlined,
 	EditOutlined,
 	SaveOutlined,
 	Close,
 } from "@mui/icons-material";
-import "../../../css/userPage.css";
+import ContactsIcon from "@mui/icons-material/Contacts";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 
-const initialUser = {
-	name: "John Doe",
-	email: "john.doe@example.com",
-	phone: "+1 (555) 123-4567",
-	street: "123 Eco Street",
-	city: "San Francisco",
-	country: "United States",
-	avatar: "/icons/user-default.svg",
-	orders: 3,
-	wishlist: 12,
-	reviews: 5,
-};
+import "../../../css/userPage.css";
+import { useGlobals } from "../../hooks/useGlobals";
+import {
+	sweetErrorHandling,
+	sweetTopSmallSuccessAlert,
+} from "../../../lib/sweetAlert";
+import { Messages } from "../../../lib/config";
+import { MemberUpdateInput } from "../../../lib/types/member";
+import { T } from "../../../lib/types/common";
+import MemberService from "../../services/MemberService";
 
 export default function UserPage() {
+	const { authMember, setAuthMember } = useGlobals();
 	const [editing, setEditing] = useState(false);
-	const [user, setUser] = useState(initialUser);
-	const [form, setForm] = useState(initialUser);
+	const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
+		{
+			memberNick: authMember?.memberNick,
+			memberPhone: authMember?.memberPhone,
+			memberAddress: authMember?.memberAddress,
+			memberDesc: authMember?.memberDesc,
+			memberImage: authMember?.memberImage,
+		},
+	);
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setForm({ ...form, [e.target.name]: e.target.value });
+	const [memberImage, setMemberImage] = useState<string>(
+		authMember?.memberImage ?? "/icons/user-default.svg",
+	);
+
+	/** HANDLERS **/
+	const handleImageViewer = (e: T) => {
+		const file = e.target.files[0];
+		const fileTypes = file.type;
+		const validateImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+		if (!validateImageTypes.includes(fileTypes)) {
+			sweetErrorHandling(Messages.error5).then();
+		} else {
+			setMemberUpdateInput((prev) => ({ ...prev, memberImage: file }));
+			setMemberImage(URL.createObjectURL(file));
+		}
 	};
 
-	const handleSave = () => {
-		setUser(form);
-		setEditing(false);
+	const memberNickHandler = (e: T) => {
+		setMemberUpdateInput((prev) => ({ ...prev, memberNick: e.target.value }));
+	};
+
+	const memberPhoneHandler = (e: T) => {
+		setMemberUpdateInput((prev) => ({ ...prev, memberPhone: e.target.value }));
+	};
+
+	const memberAddressHandler = (e: T) => {
+		setMemberUpdateInput((prev) => ({
+			...prev,
+			memberAddress: e.target.value,
+		}));
+	};
+
+	const memberDescHandler = (e: T) => {
+		setMemberUpdateInput((prev) => ({ ...prev, memberDesc: e.target.value }));
+	};
+
+	const handleSave = async () => {
+		try {
+			if (!authMember) throw new Error(Messages.error2);
+			if (
+				memberUpdateInput.memberNick === "" ||
+				memberUpdateInput.memberPhone === "" ||
+				memberUpdateInput.memberAddress === "" ||
+				memberUpdateInput.memberDesc === ""
+			) {
+				throw new Error(Messages.error3);
+			}
+
+			const member = new MemberService();
+			const result = await member.updateMember(memberUpdateInput);
+			setAuthMember(result);
+			await sweetTopSmallSuccessAlert("Modified successfully", 700);
+			setEditing(false);
+		} catch (err) {
+			console.log(err);
+			sweetErrorHandling(err).then();
+		}
 	};
 
 	const handleCancel = () => {
-		setForm(user);
+		setMemberUpdateInput({
+			memberNick: authMember?.memberNick,
+			memberPhone: authMember?.memberPhone,
+			memberAddress: authMember?.memberAddress,
+			memberDesc: authMember?.memberDesc,
+			memberImage: authMember?.memberImage,
+		});
+		setMemberImage(authMember?.memberImage ?? "/icons/user-default.svg");
 		setEditing(false);
 	};
 
@@ -60,12 +124,14 @@ export default function UserPage() {
 						{/* Left — Avatar Card */}
 						<div className="user-avatar-card">
 							<img
-								src={user.avatar}
-								alt={user.name}
+								src={memberImage}
+								alt={authMember?.memberNick}
 								className="user-avatar-img"
 							/>
-							<h2 className="user-avatar-name">{user.name}</h2>
-							<p className="user-avatar-email">{user.email}</p>
+							<h2 className="user-avatar-name">{authMember?.memberNick}</h2>
+							<p className="user-avatar-email">
+								{authMember?.memberDesc ?? "No user description"}
+							</p>
 							{!editing && (
 								<Button
 									className="user-edit-btn"
@@ -87,15 +153,7 @@ export default function UserPage() {
 									<div className="user-info-label">
 										<PersonOutline fontSize="small" /> Full Name
 									</div>
-									<p className="user-info-value">{user.name}</p>
-								</div>
-								<div className="user-info-divider" />
-
-								<div className="user-info-field">
-									<div className="user-info-label">
-										<MailOutline fontSize="small" /> Email Address
-									</div>
-									<p className="user-info-value">{user.email}</p>
+									<p className="user-info-value">{authMember?.memberNick}</p>
 								</div>
 								<div className="user-info-divider" />
 
@@ -103,7 +161,17 @@ export default function UserPage() {
 									<div className="user-info-label">
 										<PhoneOutlined fontSize="small" /> Phone Number
 									</div>
-									<p className="user-info-value">{user.phone}</p>
+									<p className="user-info-value">{authMember?.memberPhone}</p>
+								</div>
+								<div className="user-info-divider" />
+
+								<div className="user-info-field">
+									<div className="user-info-label">
+										<ContactsIcon fontSize="small" /> Description
+									</div>
+									<p className="user-info-value">
+										{authMember?.memberDesc ?? "No user description"}
+									</p>
 								</div>
 								<div className="user-info-divider" />
 
@@ -111,26 +179,9 @@ export default function UserPage() {
 									<div className="user-info-label">
 										<LocationOnOutlined fontSize="small" /> Address
 									</div>
-									<p className="user-info-value">{user.street}</p>
 									<p className="user-info-value">
-										{user.city}, {user.country}
+										{authMember?.memberAddress ?? "No user address"}
 									</p>
-								</div>
-
-								{/* Stats */}
-								<div className="user-stats">
-									<div className="user-stat-item">
-										<span className="user-stat-value">{user.orders}</span>
-										<span className="user-stat-label">Orders</span>
-									</div>
-									<div className="user-stat-item">
-										<span className="user-stat-value">{user.wishlist}</span>
-										<span className="user-stat-label">Wishlist</span>
-									</div>
-									<div className="user-stat-item">
-										<span className="user-stat-value">{user.reviews}</span>
-										<span className="user-stat-label">Reviews</span>
-									</div>
 								</div>
 							</div>
 						) : (
@@ -143,55 +194,55 @@ export default function UserPage() {
 										<label className="user-form-label">Full Name</label>
 										<input
 											className="user-form-input"
-											name="name"
-											value={form.name}
-											onChange={handleChange}
+											value={memberUpdateInput.memberNick ?? ""}
+											onChange={memberNickHandler}
 										/>
 									</div>
+
 									<div className="user-form-field">
-										<label className="user-form-label">Email Address</label>
+										<label className="user-form-label">Description</label>
 										<input
 											className="user-form-input"
-											name="email"
-											value={form.email}
-											onChange={handleChange}
+											value={memberUpdateInput.memberDesc ?? ""}
+											onChange={memberDescHandler}
 										/>
 									</div>
+
 									<div className="user-form-field">
 										<label className="user-form-label">Phone Number</label>
 										<input
 											className="user-form-input"
-											name="phone"
-											value={form.phone}
-											onChange={handleChange}
+											value={memberUpdateInput.memberPhone ?? ""}
+											onChange={memberPhoneHandler}
 										/>
 									</div>
+
 									<div className="user-form-field">
-										<label className="user-form-label">Street Address</label>
+										<label className="user-form-label">Address</label>
 										<input
 											className="user-form-input"
-											name="street"
-											value={form.street}
-											onChange={handleChange}
+											value={memberUpdateInput.memberAddress ?? ""}
+											onChange={memberAddressHandler}
 										/>
 									</div>
+
 									<div className="user-form-field">
-										<label className="user-form-label">City</label>
+										<label className="user-form-label">Upload Image</label>
 										<input
 											className="user-form-input"
-											name="city"
-											value={form.city}
-											onChange={handleChange}
+											value="JPG, JPEG, PNG formats only!"
+											disabled
 										/>
-									</div>
-									<div className="user-form-field">
-										<label className="user-form-label">Country</label>
-										<input
-											className="user-form-input"
-											name="country"
-											value={form.country}
-											onChange={handleChange}
-										/>
+										<div className="up-del-box">
+											<Button className="btn" component="label">
+												<CloudDownloadIcon />
+												<input
+													type="file"
+													hidden
+													onChange={handleImageViewer}
+												/>
+											</Button>
+										</div>
 									</div>
 								</div>
 

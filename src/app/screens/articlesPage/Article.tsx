@@ -1,62 +1,82 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Container, Pagination, PaginationItem, Stack } from "@mui/material";
-import ArticleListCard from "../../components/cards/articleListCard";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { ArticleCategory } from "../../../lib/enums/article.enum";
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
+import { setArticles } from "./slice";
+import { Article, ArticleInquiry } from "../../../lib/types/article";
+import { retrieveArticles } from "./selector";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import ArticleService from "../../services/ArticleService";
+import { CalendarToday, FavoriteBorder, Visibility } from "@mui/icons-material";
+import { serverApi } from "../../../lib/config";
 
-const categories = ["All", "Events", "News", "Advice", "Fuels", "Others"];
-const allArticles = [
-	{
-		id: 1,
-		title: "Natural Soap Set",
-		desc: "Hand-made soap from natural ingredients",
-		likes: 312,
-		views: 1543,
-		date: "2026.06.02",
-		img: "/img/product4.jpg",
-		category: "Beauty",
-	},
-	{
-		id: 2,
-		title: "Natural Soap Set",
-		desc: "Hand-made soap from natural ingredients",
-		likes: 312,
-		views: 1543,
-		date: "2026.06.02",
-		img: "/img/product4.jpg",
-		category: "Beauty",
-	},
-	{
-		id: 3,
-		category: "Beauty",
-		title: "Natural Soap Set",
-		desc: "Hand-made soap from natural ingredients",
-		date: "2026.06.02",
-		likes: 312,
-		views: 1543,
-		img: "/img/product4.jpg",
-	},
-	{
-		id: 4,
-		title: "Natural Soap Set",
-		desc: "Hand-made soap from natural ingredients",
-		likes: 312,
-		views: 1543,
-		date: "2026.06.02",
-		img: "/img/product4.jpg",
-		category: "Beauty",
-	},
+const categories = [
+	{ label: "All", value: undefined },
+	{ label: "News", value: ArticleCategory.NEWS },
+	{ label: "Advice", value: ArticleCategory.ADVICE },
+	{ label: "Stoves", value: ArticleCategory.STOVE },
+	{ label: "Fuels", value: ArticleCategory.FUEL },
+	{ label: "Others", value: ArticleCategory.OTHER },
 ];
 
-export default function Articles() {
-	const [activeCategory, setActiveCategory] = useState("All");
-	const [search, setSearch] = useState("");
+const actionDispatch = (dispatch: Dispatch) => ({
+	setArticles: (data: Article[]) => dispatch(setArticles(data)),
+});
 
-	const filtered = allArticles.filter((a) => {
-		const matchCat = activeCategory === "All" || a.category === activeCategory;
-		const matchSearch = a.title.toLowerCase().includes(search.toLowerCase());
-		return matchCat && matchSearch;
+const articlesRetriever = createSelector(retrieveArticles, (articles) => ({
+	articles,
+}));
+
+export default function Articles() {
+	const { setArticles } = actionDispatch(useDispatch());
+	const { articles } = useSelector(articlesRetriever);
+	const history = useHistory();
+
+	const [articleSearch, setArticleSearch] = useState<ArticleInquiry>({
+		page: 1,
+		limit: 8,
+		order: "createdAt",
+		search: "",
+		articleCategory: undefined,
 	});
+
+	const [searchText, setSearchText] = useState<string>("");
+	const [activeCategory, setActiveCategory] = useState<string>("All");
+
+	useEffect(() => {
+		const article = new ArticleService();
+		article
+			.getArticles(articleSearch)
+			.then((data) => setArticles(data))
+			.catch((err) => console.log(err));
+	}, [articleSearch]);
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setArticleSearch((prev) => ({ ...prev, page: 1, search: searchText }));
+		}, 500);
+		return () => clearTimeout(timer);
+	}, [searchText]);
+
+	/** HANDLERS **/
+	const categoryHandler = (
+		label: string,
+		value: ArticleCategory | undefined,
+	) => {
+		setActiveCategory(label);
+		setArticleSearch((prev) => ({ ...prev, page: 1, articleCategory: value }));
+	};
+
+	const paginationHandler = (_e: ChangeEvent<any>, value: number) => {
+		setArticleSearch((prev) => ({ ...prev, page: value }));
+	};
+
+	const chooseArticleHandler = (id: string) => {
+		history.push(`/articles/${id}`);
+	};
 
 	return (
 		<div className="articles-page">
@@ -78,10 +98,11 @@ export default function Articles() {
 						<div className="articles-cats">
 							{categories.map((cat) => (
 								<button
-									key={cat}
-									className={`articles-cat-btn ${activeCategory === cat ? "active" : ""}`}
-									onClick={() => setActiveCategory(cat)}>
-									{cat}
+									style={{ border: "none" }}
+									key={cat.label}
+									className={`sidebar-cat-item ${activeCategory === cat.label ? "active" : ""}`}
+									onClick={() => categoryHandler(cat.label, cat.value)}>
+									{cat.label}
 								</button>
 							))}
 						</div>
@@ -89,23 +110,59 @@ export default function Articles() {
 							className="articles-search"
 							type="text"
 							placeholder="Search articles..."
-							value={search}
-							onChange={(e) => setSearch(e.target.value)}
+							value={searchText}
+							onChange={(e) => setSearchText(e.target.value)}
 						/>
 					</div>
 
 					{/* Count */}
-					<p className="articles-count">{filtered.length} articles found</p>
+					<p className="articles-count">{articles.length} articles found</p>
 
 					{/* List */}
 					<div className="articles-list">
-						{filtered.map((article) => (
-							<ArticleListCard key={article.id} {...article} />
+						{articles.map((article) => (
+							<div
+								key={article._id}
+								className="article-list-card"
+								onClick={() => chooseArticleHandler(article._id)}>
+								<div className="article-list-img-wrap">
+									<img
+										src={`${serverApi}/${article.articleImage}`}
+										alt={""}
+										className="article-list-img"
+									/>
+								</div>
+								<div className="article-list-body">
+									<span className="article-list-category">
+										{article.articleCategory}
+									</span>
+									<h3 className="article-list-title">{article.articleTitle}</h3>
+									<p className="article-list-desc">
+										{article.articleContent.slice(0, 110) + "..."}
+									</p>
+									<div className="article-list-meta">
+										<span className="article-list-meta-item">
+											<CalendarToday fontSize="small" />{" "}
+											{new Date(article.createdAt).toLocaleDateString("en-GB")}
+										</span>
+										<span className="article-list-meta-item">
+											<FavoriteBorder fontSize="small" /> {article.articleLikes}
+										</span>
+										<span className="article-list-meta-item">
+											<Visibility fontSize="small" /> {article.articleViews}
+										</span>
+									</div>
+								</div>
+							</div>
 						))}
 						<Stack className="pagination-section">
 							<Pagination
-								count={allArticles.length !== 0 ? 4 : 8}
-								page={1}
+								count={
+									articles.length !== 0
+										? articleSearch.page + 1
+										: articleSearch.page
+								}
+								page={articleSearch.page}
 								renderItem={(item) => (
 									<PaginationItem
 										components={{
@@ -113,9 +170,9 @@ export default function Articles() {
 											next: ArrowForwardIcon,
 										}}
 										{...item}
-										// color="primary"
 									/>
 								)}
+								onChange={paginationHandler}
 							/>
 						</Stack>
 					</div>

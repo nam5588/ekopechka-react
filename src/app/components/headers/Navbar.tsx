@@ -109,7 +109,7 @@ export default function Navbar(props: NavbarProps) {
 							<Box sx={{ borderRadius: "50%" }}>
 								<img
 									className="user-avatar"
-									src="/icons/user-default.svg"
+									src={authMember?.memberImage ?? "/icons/user-default.svg"}
 									aria-haspopup={"true"}
 									alt=""
 									onClick={handleLogoutClick}

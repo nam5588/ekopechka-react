@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "@mui/material";
 import {
 	ArrowBack,
@@ -10,22 +10,63 @@ import {
 } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import "../../../css/articles.css";
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
+import { Article } from "../../../lib/types/article";
+import { setChosenArticle, setNewArticlesSug } from "./slice";
+import { retrieveChosenArticle, retrieveNewArticlesSug } from "./selector";
+import { useDispatch, useSelector } from "react-redux";
+import ArticleService from "../../services/ArticleService";
+import { serverApi } from "../../../lib/config";
 
-const article = {
-	id: 1,
-	title: "Natural Soap Set",
-	desc: "Hand-made soap from natural ingredients",
-	likes: 312,
-	views: 1543,
-	date: "2026.06.02",
-	img: "/img/product4.jpg",
-	category: "Beauty",
-};
+const actionDispatch = (dispatch: Dispatch) => ({
+	setChosenArticle: (data: Article) => dispatch(setChosenArticle(data)),
+	setNewArticlesSug: (data: Article[]) => dispatch(setNewArticlesSug(data)),
+});
+
+const chosenArticleRetriever = createSelector(
+	retrieveChosenArticle,
+	(article) => ({
+		article,
+	}),
+);
+
+const newArticleSugRetriever = createSelector(
+	retrieveNewArticlesSug,
+	(newArticlesSug) => ({
+		newArticlesSug,
+	}),
+);
 
 export default function ChosenArticle() {
+	const { setChosenArticle, setNewArticlesSug } = actionDispatch(useDispatch());
+	const { article } = useSelector(chosenArticleRetriever);
+	const { newArticlesSug } = useSelector(newArticleSugRetriever);
+
 	const { articleId } = useParams<{ articleId: string }>();
 	const history = useHistory();
+
 	const [liked, setLiked] = React.useState(false);
+
+	useEffect(() => {
+		const product = new ArticleService();
+		console.log("id:", articleId);
+
+		product
+			.getArticle(articleId)
+			.then((data) => setChosenArticle(data))
+			.catch((err) => console.log(err));
+		product
+			.getArticles({ page: 1, limit: 3, order: "articleViews" })
+			.then((data) => {
+				setNewArticlesSug(data);
+			})
+			.catch((err) => console.log(err));
+	}, [articleId]);
+
+	const chooseArticleHandler = (id: string) => {
+		history.push(`/article/${id}`);
+	};
+	if (!article) return null;
 
 	return (
 		<div className="chosen-article-page">
@@ -40,26 +81,29 @@ export default function ChosenArticle() {
 				{/* Hero Image */}
 				<div className="chosen-article-img-wrap">
 					<img
-						src={article.img}
-						alt={article.title}
+						src={`${serverApi}/${article.articleImage}`}
+						alt={""}
 						className="chosen-article-img"
 					/>
 				</div>
 
 				{/* Category + Title + Meta */}
 				<div className="chosen-article-header">
-					<span className="chosen-article-category">{article.category}</span>
-					<h1 className="chosen-article-title">{article.title}</h1>
+					<span className="chosen-article-category">
+						{article.articleCategory}
+					</span>
+					<h1 className="chosen-article-title">{article.articleTitle}</h1>
 					<div className="chosen-article-meta">
 						<span className="chosen-article-meta-item">
-							<CalendarToday fontSize="small" /> {article.date}
+							<CalendarToday fontSize="small" />{" "}
+							{new Date(article.createdAt).toLocaleDateString("en-GB")}
 						</span>
 						<span className="chosen-article-meta-item">
 							<FavoriteBorder fontSize="small" />
-							{article.likes + (liked ? 1 : 0)} likes
+							{article.articleLikes + (liked ? 1 : 0)} likes
 						</span>
 						<span className="chosen-article-meta-item">
-							<Visibility fontSize="small" /> {article.views} views
+							<Visibility fontSize="small" /> {article.articleViews} views
 						</span>
 					</div>
 				</div>
@@ -67,7 +111,7 @@ export default function ChosenArticle() {
 				<div className="chosen-article-divider" />
 
 				{/* Content */}
-				<div className="chosen-article-content">{article.desc}</div>
+				<div className="chosen-article-content">{article.articleContent}</div>
 
 				{/* Location & Contact */}
 				<div className="chosen-article-location-box">
@@ -80,17 +124,17 @@ export default function ChosenArticle() {
 							<h3 className="chosen-article-location-heading">
 								EkoPechka Headquarters
 							</h3>
-							<p>123 Eco Street</p>
-							<p>San Francisco, CA 94102</p>
-							<p>United States</p>
+							<p>Yakkabog' Street</p>
+							<p>Namangan, Xasanobod</p>
+							<p>Uzbekistan</p>
 						</div>
 						<div>
 							<h3 className="chosen-article-location-heading">
 								Contact Information
 							</h3>
-							<p>Email: info@ekopechka.com</p>
-							<p>Phone: +1 (555) 123-4567</p>
-							<p>Hours: Mon-Fri 9AM-6PM PT</p>
+							<p>Email: mukhammad5589@gmail.com</p>
+							<p>Phone: +998 93 491-7500</p>
+							<p>Hours: Mon-Fri 9AM-7PM PT</p>
 						</div>
 					</div>
 				</div>
@@ -104,9 +148,11 @@ export default function ChosenArticle() {
 						onClick={() => setLiked(!liked)}>
 						{liked ? "Liked" : "Like Article"}
 					</Button>
-					<Button className="chosen-article-share-btn" fullWidth>
-						Share
-					</Button>
+					<a style={{ textDecoration: "none" }} href="https://t.me/s/ekopechka">
+						<Button className="chosen-article-share-btn" fullWidth>
+							More
+						</Button>
+					</a>
 				</div>
 			</div>
 		</div>

@@ -10,7 +10,7 @@ export default function ArticlesPage() {
 	return (
 		<div className="products-page">
 			<Switch>
-				<Route path={`${products.path}/:productId`}>
+				<Route path={`${products.path}/:articleId`}>
 					<ChosenArticle />
 				</Route>
 				<Route path={`${products.path}`}>
