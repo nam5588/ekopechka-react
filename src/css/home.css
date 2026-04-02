@@ -23,9 +23,9 @@
 
 .welcome-title {
 	font-family: "Playfair Display", serif;
+	color: #1a1a1a;
 	font-size: clamp(2.5rem, 5vw, 3.75rem);
 	font-weight: 800;
-	color: #1a1a1a;
 	line-height: 1.15;
 	margin: 0 0 24px 0;
 }
@@ -355,6 +355,17 @@
 
 .product-add-btn.MuiButton-root:hover {
 	background: #5a7a5e !important;
+}
+
+.no-products {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: "Playfair Display", serif;
+	color: #1a1a1a;
+	font-size: 32px;
+	width: 100%;
+	height: 957px;
 }
 
 /* ===== NEW POPULAR PRODUCTS ===== */

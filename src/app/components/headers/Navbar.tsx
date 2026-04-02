@@ -1,12 +1,11 @@
-import React from "react";
-import Basket from "./Basket";
+import React, { useState } from "react";
+import "../../../css/modal.css";
 
-import { Stack, Container, Box, Button } from "@mui/material";
+import { Stack, Container, Box, Button, Badge } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
-	const authMember = true;
-
+	const authMember = false;
 	return (
 		<div className="navbar">
 			<Container className="navbar-container">
@@ -62,13 +61,16 @@ export default function Navbar() {
 							</NavLink>
 						</Box>
 						<Box className={"hover-line"}>
-							<img
-								className="basket-btn"
-								src="/icons/basket.svg"
-								alt="basket"
-							/>
+							<Badge badgeContent={5} color="success">
+								<img
+									className="basket-btn"
+									src="/icons/basket.svg"
+									alt="basket"
+									onClick={() => alert("aaa")}
+								/>
+							</Badge>
 						</Box>
-						<Basket />
+						{/* <BasketModalProps /> */}
 						{authMember ? (
 							<Box sx={{ borderRadius: "50%" }}>
 								<img
@@ -80,7 +82,7 @@ export default function Navbar() {
 								/>
 							</Box>
 						) : (
-							<Button>LOGIN</Button>
+							<Button sx={{ background: "#6b8e6f !important;" }}>LOGIN</Button>
 						)}
 					</Stack>
 				</Stack>

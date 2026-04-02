@@ -1,31 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HomePageState } from "../../../lib/types/screen";
+import { ProductPageState } from "../../../lib/types/screen";
 
-const initialState: HomePageState = {
-	popularProducts: [],
-	newProducts: [],
-	popularArticles: [],
+const initialState: ProductPageState = {
+	products: [],
+	newProductsSug: [],
+	chosenProduct: null,
 };
 
-const homePageSlice = createSlice({
-	name: "homePage",
+const productPageSlice = createSlice({
+	name: "productPage",
 	initialState,
 	reducers: {
-		setPopularProducts: (state, action) => {
-			state.popularProducts = action.payload;
+		setProducts: (state, action) => {
+			state.products = action.payload;
 		},
-		setNewProducts: (state, action) => {
-			state.newProducts = action.payload;
+		setChosenProduct: (state, action) => {
+			state.chosenProduct = action.payload;
 		},
-		setPopularArticles: (state, action) => {
-			state.popularArticles = action.payload;
+		setNewProductsSug: (state, action) => {
+			state.newProductsSug = action.payload;
 		},
 	},
 });
 
-export const { setPopularProducts, setNewProducts, setPopularArticles } =
-	homePageSlice.actions;
+export const { setProducts, setChosenProduct, setNewProductsSug } =
+	productPageSlice.actions;
 
-const HomePageReducer = homePageSlice.reducer;
+const ProductPageReducer = productPageSlice.reducer;
 
-export default HomePageReducer;
+export default ProductPageReducer;

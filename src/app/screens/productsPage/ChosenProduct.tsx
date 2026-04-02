@@ -1,28 +1,64 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@mui/material";
 import {
 	FavoriteBorder,
 	Visibility,
-	Star,
 	ArrowBack,
 	CheckCircleOutline,
 } from "@mui/icons-material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
+import { setChosenProduct, setNewProductsSug } from "./slice";
+import { Product } from "../../../lib/types/products";
+import { useDispatch, useSelector } from "react-redux";
 
-const product = {
-	id: 1,
-	name: "Organic Cotton T-Shirt",
-	desc: "Comfortable and sustainable cotton t-shirt",
-	price: 29.99,
-	rating: 4.8,
-	likes: 234,
-	views: 1205,
-	img: "/img/product1.jpg",
-	category: "Clothing",
-};
+import { serverApi } from "../../../lib/config";
+import ProductService from "../../services/ProductService";
+import { retrieveNewProductsSug, retrieveChosenProduct } from "./selector";
+
+const actionDispatch = (dispatch: Dispatch) => ({
+	setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
+	setNewProductsSug: (data: Product[]) => dispatch(setNewProductsSug(data)),
+});
+
+const chosenProductRetriever = createSelector(
+	retrieveChosenProduct,
+	(product) => ({
+		product,
+	}),
+);
+
+const newProductsSugRetriever = createSelector(
+	retrieveNewProductsSug,
+	(newProductsSug) => ({
+		newProductsSug,
+	}),
+);
 
 export default function ChosenProduct() {
+	const { setChosenProduct, setNewProductsSug } = actionDispatch(useDispatch());
+	const { product } = useSelector(chosenProductRetriever);
+	const { newProductsSug } = useSelector(newProductsSugRetriever);
+	const { productId } = useParams<{ productId: string }>();
 	const history = useHistory();
+	useEffect(() => {
+		const product = new ProductService();
+		product
+			.getProduct(productId)
+			.then((data) => setChosenProduct(data))
+			.catch((err) => console.log(err));
+		product
+			.getProducts({ page: 1, limit: 3, order: "productViews" })
+			.then((data) => {
+				setNewProductsSug(data);
+			})
+			.catch((err) => console.log(err));
+	}, [productId]);
+
+	const chooseDishHandler = (id: string) => {
+		history.push(`/products/${id}`);
+	};
+
 	return (
 		<div className="chosen-page">
 			<div className="chosen-card">
@@ -36,21 +72,19 @@ export default function ChosenProduct() {
 				{/* Main */}
 				<div className="chosen-main">
 					<div className="chosen-img-wrap">
-						<img src={product.img} alt={product.name} className="chosen-img" />
+						<img
+							src={`${serverApi}/${product?.productImages[0]}`}
+							alt={""}
+							className="chosen-img"
+						/>
 					</div>
 
 					<div className="chosen-info">
-						<h1 className="chosen-name">{product.name}</h1>
-
-						<div className="chosen-rating-row">
-							<div className="chosen-stars">{product.rating}</div>
-							<span className="chosen-rating-txt">{product.rating} rating</span>
-						</div>
-
-						<p className="chosen-desc">{product.desc}</p>
+						<h1 className="chosen-name">{product?.productName}</h1>
+						<p className="chosen-desc">{product?.productDesc}</p>
 
 						<div className="chosen-price-row">
-							<span className="chosen-price">${product.price}</span>
+							<span className="chosen-price">${product?.productPrice}</span>
 						</div>
 
 						<div className="chosen-stock">
@@ -63,19 +97,16 @@ export default function ChosenProduct() {
 						<div className="chosen-meta">
 							<span className="chosen-meta-item">
 								<FavoriteBorder fontSize="small" />
-								{product.likes} likes
+								{product?.productLikes} likes
 							</span>
 							<span className="chosen-meta-item">
 								<Visibility fontSize="small" />
-								{product.views} views
+								{product?.productViews} views
 							</span>
 						</div>
 
 						<Button className="chosen-btn-cart" fullWidth>
 							Add to Cart
-						</Button>
-						<Button className="chosen-btn-wish" fullWidth>
-							Add to Wishlist
 						</Button>
 					</div>
 				</div>
@@ -84,26 +115,27 @@ export default function ChosenProduct() {
 				<div className="chosen-divider" />
 
 				<div className="chosen-related">
-					<h2 className="chosen-related-title">You Might Also Like</h2>
+					<h2 className="chosen-related-title">
+						You might also like our popular products
+					</h2>
 					<div className="chosen-related-grid">
-						{[
-							{ id: 1, img: "", name: "test", price: 10, rating: 1 },
-							{ id: 1, img: "", name: "test", price: 10, rating: 2 },
-							{ id: 1, img: "", name: "test", price: 10, rating: 3 },
-						].map((item) => (
+						{newProductsSug.map((product) => (
 							<div
 								className="related-card"
-								key={item.id}
-								onClick={() => history.push(`/products/${item.id}`)}>
+								key={product._id}
+								onClick={() => chooseDishHandler(product._id)}>
 								<div className="related-img-wrap">
-									<img src={item.img} alt={item.name} className="related-img" />
+									<img
+										src={`${serverApi}/${product?.productImages?.[0]}`}
+										alt={""}
+										className="related-img"
+									/>
 								</div>
 								<div className="related-body">
-									<h4 className="related-name">{item.name}</h4>
+									<h4 className="related-name">{product.productName}</h4>
 									<div className="related-bottom">
-										<span className="related-price">${item.price}</span>
-										<span className="related-rating">
-											{item.rating} <Star className="related-star" />
+										<span className="related-price">
+											${product.productPrice}
 										</span>
 									</div>
 								</div>

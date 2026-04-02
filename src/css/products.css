@@ -112,6 +112,9 @@
 .products-main {
 	flex: 1;
 }
+.products-box {
+	height: 920px;
+}
 
 .products-count {
 	font-family: "Playfair Display", serif;
