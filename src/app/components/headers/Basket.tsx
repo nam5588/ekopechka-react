@@ -11,7 +11,7 @@ import { CartItem } from "../../../lib/types/search";
 import { Messages, serverApi } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
-// import OrderService from "../../services/OrderService";
+import OrderService from "../../services/OrderService";
 
 interface BasketProps {
 	cartItems: CartItem[];
@@ -49,8 +49,8 @@ export default function Basket(props: BasketProps) {
 			handleClose();
 			if (!authMember) throw new Error(Messages.error2);
 
-			// const order = new OrderService();
-			// await order.createOrder(cartItems);
+			const order = new OrderService();
+			await order.createOrder(cartItems);
 
 			onDeleteAll();
 
@@ -72,8 +72,8 @@ export default function Basket(props: BasketProps) {
 				aria-haspopup="true"
 				aria-expanded={open ? "true" : undefined}
 				onClick={handleClick}>
-				<Badge badgeContent={cartItems.length} color="secondary">
-					<img alt="" src={"/icons/shopping-cart.svg"} />
+				<Badge badgeContent={cartItems.length} color="success">
+					<img className="basket-btn" src="/icons/basket.svg" alt="basket" />
 				</Badge>
 			</IconButton>
 			<Menu
@@ -173,7 +173,7 @@ export default function Basket(props: BasketProps) {
 										fontWeight: "bolder",
 										fontSize: "14px",
 									}}>
-									{shippingCoast == 0
+									{shippingCoast === 0
 										? "Free 🚚"
 										: `Spend $${100 - itemsPrice} for free delivery`}
 								</span>

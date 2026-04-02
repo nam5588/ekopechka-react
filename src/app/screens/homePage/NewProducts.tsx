@@ -6,11 +6,12 @@ import {
 	Star,
 	Visibility,
 } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
 import { retrieveNewProducts } from "./selector";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR **/
 const popularProductRetriever = createSelector(
@@ -18,9 +19,21 @@ const popularProductRetriever = createSelector(
 	(newProducts) => ({ newProducts }),
 );
 
-export default function NewProducts() {
+interface NewProductsProps {
+	onAdd: (item: CartItem) => void;
+}
+
+export default function NewProducts(props: NewProductsProps) {
+	const { onAdd } = props;
+	const history = useHistory();
+
 	const { newProducts } = useSelector(popularProductRetriever);
 	const favLike: boolean = true;
+
+	const chooseDishHandler = (id: string) => {
+		history.push(`/products/${id}`);
+	};
+
 	return (
 		<div className={"new-products-frame"}>
 			<Container>
@@ -36,7 +49,10 @@ export default function NewProducts() {
 					{newProducts.map((product) => {
 						const imagePath = `${serverApi}/${product.productImages[0]}`;
 						return (
-							<div key={product._id} className="product-card">
+							<div
+								onClick={() => chooseDishHandler(product._id)}
+								key={product._id}
+								className="product-card">
 								<div className="product-img-wrap">
 									<img
 										src={imagePath}
@@ -70,7 +86,20 @@ export default function NewProducts() {
 											<Visibility fontSize="small" /> {product.productViews}
 										</span>
 									</div>
-									<Button className="product-add-btn" fullWidth>
+									<Button
+										className="product-add-btn"
+										fullWidth
+										onClick={(e) => {
+											console.log("BUTTON PRESSED");
+											onAdd({
+												_id: product._id,
+												quantity: 1,
+												name: product.productName,
+												price: product.productPrice,
+												image: product.productImages[0],
+											});
+											e.stopPropagation();
+										}}>
 										Add to Cart
 									</Button>
 								</div>

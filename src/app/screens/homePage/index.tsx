@@ -20,6 +20,8 @@ import {
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import ArticleService from "../../services/ArticleService";
+import { useGlobals } from "../../hooks/useGlobals";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -28,8 +30,14 @@ const actionDispatch = (dispatch: Dispatch) => ({
 	setPopularArticles: (data: Article[]) => dispatch(setPopularArticles(data)),
 });
 
-export default function HomePage() {
-	const authMember = false;
+interface HomePageProps {
+	setSignupOpen: (isOpen: boolean) => void;
+	onAdd: (item: CartItem) => void;
+}
+
+export default function HomePage(props: HomePageProps) {
+	const { setSignupOpen, onAdd } = props;
+	const { authMember } = useGlobals();
 
 	const { setPopularProducts, setNewProducts, setPopularArticles } =
 		actionDispatch(useDispatch());
@@ -97,7 +105,11 @@ export default function HomePage() {
 								className="welcome-btns">
 								{!authMember ? (
 									<NavLink to={"/signup"}>
-										<Button className="btn-shop">SignUp</Button>
+										<Button
+											className="btn-shop"
+											onClick={() => setSignupOpen(true)}>
+											SignUp
+										</Button>
 									</NavLink>
 								) : (
 									<>
@@ -127,9 +139,9 @@ export default function HomePage() {
 				</Container>
 			</div>
 			<Statistics />
-			<PopularProducts />
+			<PopularProducts onAdd={onAdd} />
 			<Services />
-			<NewProducts />
+			<NewProducts onAdd={onAdd} />
 			<Events />
 		</div>
 	);

@@ -1,40 +1,28 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import { Fab, Stack, TextField } from "@mui/material";
-import styled from "styled-components";
-import LoginIcon from "@mui/icons-material/Login";
+import {
+	Dialog,
+	DialogContent,
+	Stack,
+	TextField,
+	Button,
+	Typography,
+	Box,
+	IconButton,
+	InputAdornment,
+} from "@mui/material";
+import {
+	Login as LoginIcon,
+	PersonAddAlt1 as SignupIcon,
+	Close as CloseIcon,
+	Visibility,
+	VisibilityOff,
+} from "@mui/icons-material";
 import { T } from "../../../lib/types/common";
 import { Messages } from "../../../lib/config";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
-
-const useStyles = makeStyles((theme) => ({
-	modal: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	paper: {
-		backgroundColor: theme.palette.background.paper,
-		border: "2px solid #000",
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 2, 2),
-	},
-}));
-
-const ModalImg = styled.img`
-	width: 62%;
-	height: 100%;
-	border-radius: 10px;
-	background: #000;
-	margin-top: 9px;
-	margin-left: 10px;
-`;
 
 interface AuthenticationModalProps {
 	signupOpen: boolean;
@@ -43,54 +31,46 @@ interface AuthenticationModalProps {
 	handleLoginClose: () => void;
 }
 
-export default function AuthenticationModal(props: AuthenticationModalProps) {
-	const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
-	const classes = useStyles();
+export default function AuthenticationModal({
+	signupOpen,
+	loginOpen,
+	handleSignupClose,
+	handleLoginClose,
+}: AuthenticationModalProps) {
 	const [memberNick, setMemberNick] = useState<string>("");
 	const [memberPhone, setMemberPhone] = useState<string>("");
 	const [memberPassword, setMemberPassword] = useState<string>("");
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const { setAuthMember } = useGlobals();
 
+	const isSignup = signupOpen;
+	const isOpen = signupOpen || loginOpen;
+	const handleClose = isSignup ? handleSignupClose : handleLoginClose;
+
 	/** HANDLERS **/
-	const handleUsername = (e: T) => {
-		setMemberNick(e.target.value);
-	};
-
-	const handlePhone = (e: T) => {
-		setMemberPhone(e.target.value);
-	};
-
-	const handlePassword = (e: T) => {
-		setMemberPassword(e.target.value);
-	};
-
 	const handlePasswordKeyDown = (e: T) => {
-		if (e.key === "Enter" && signupOpen) {
-			handleSignupRequest().then();
-		} else if (e.key === "Enter" && loginOpen) {
-			handleLoginRequest().then();
+		if (e.key === "Enter") {
+			isSignup ? handleSignupRequest() : handleLoginRequest();
 		}
 	};
 
 	const handleSignupRequest = async () => {
 		try {
-			const isFullfill =
+			const isFulfilled =
 				memberNick !== "" && memberPhone !== "" && memberPassword !== "";
-			if (!isFullfill) throw new Error(Messages.error3);
+			if (!isFulfilled) throw new Error(Messages.error3);
 
 			const signupInput: MemberInput = {
-				memberNick: memberNick,
-				memberPhone: memberPhone,
-				memberPassword: memberPassword,
+				memberNick,
+				memberPhone,
+				memberPassword,
 			};
-
 			const member = new MemberService();
 			const result = await member.signup(signupInput);
 
 			setAuthMember(result);
 			handleSignupClose();
 		} catch (err) {
-			console.log(err);
 			handleSignupClose();
 			sweetErrorHandling(err).then();
 		}
@@ -98,136 +78,196 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
 	const handleLoginRequest = async () => {
 		try {
-			const isFullfill = memberNick !== "" && memberPassword !== "";
-			if (!isFullfill) throw new Error(Messages.error3);
+			const isFulfilled = memberNick !== "" && memberPassword !== "";
+			if (!isFulfilled) throw new Error(Messages.error3);
 
-			const loginInput: LoginInput = {
-				memberNick: memberNick,
-				memberPassword: memberPassword,
-			};
-
+			const loginInput: LoginInput = { memberNick, memberPassword };
 			const member = new MemberService();
 			const result = await member.login(loginInput);
-			// setAuthMember(result);
 
-			console.log("Before setAuthMember:", localStorage.getItem("memberData"));
 			setAuthMember(result);
-
 			handleLoginClose();
-			console.log("After !@#$%!@#$%:", localStorage.getItem("memberData"));
 		} catch (err) {
-			console.log(err);
 			handleLoginClose();
 			sweetErrorHandling(err).then();
 		}
 	};
 
 	return (
-		<div>
-			<Modal
-				aria-labelledby="transition-modal-title"
-				aria-describedby="transition-modal-description"
-				className={classes.modal}
-				open={signupOpen}
-				onClose={handleSignupClose}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}>
-				<Fade in={signupOpen}>
-					<Stack
-						className={classes.paper}
-						direction={"row"}
-						sx={{ width: "800px" }}>
-						<ModalImg src={"/img/auth.webp"} alt="camera" />
-						<Stack sx={{ marginLeft: "69px", alignItems: "center" }}>
-							<h2>Signup Form</h2>
-							<TextField
-								sx={{ marginTop: "7px" }}
-								id="outlined-basic"
-								label="username"
-								variant="outlined"
-								onChange={handleUsername}
-							/>
-							<TextField
-								sx={{ my: "17px" }}
-								id="outlined-basic"
-								label="phone number"
-								variant="outlined"
-								onChange={handlePhone}
-							/>
-							<TextField
-								id="outlined-basic"
-								label="password"
-								variant="outlined"
-								onChange={handlePassword}
-								onKeyDown={handlePasswordKeyDown}
-							/>
-							<Fab
-								sx={{ marginTop: "30px", width: "120px" }}
-								variant="extended"
-								color="primary"
-								onClick={handleSignupRequest}>
-								<LoginIcon sx={{ mr: 1 }} />
-								Signup
-							</Fab>
-						</Stack>
-					</Stack>
-				</Fade>
-			</Modal>
-
-			<Modal
-				aria-labelledby="transition-modal-title"
-				aria-describedby="transition-modal-description"
-				className={classes.modal}
-				open={loginOpen}
-				onClose={handleLoginClose}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}>
-				<Fade in={loginOpen}>
-					<Stack
-						className={classes.paper}
-						direction={"row"}
-						sx={{ width: "700px" }}>
-						<ModalImg src={"/img/auth.webp"} alt="camera" />
-						<Stack
+		<Dialog
+			open={isOpen}
+			onClose={handleClose}
+			maxWidth="md"
+			PaperProps={{
+				sx: {
+					borderRadius: "20px",
+					overflow: "hidden",
+					width: "780px",
+					maxHeight: "520px",
+				},
+			}}>
+			<DialogContent sx={{ p: 0, display: "flex", height: "100%" }}>
+				{/* Left — Image Panel */}
+				<Box
+					sx={{
+						width: "42%",
+						minHeight: "500px",
+						position: "relative",
+						flexShrink: 0,
+						backgroundImage: `url('/img/authImg.png')`,
+						backgroundSize: "cover",
+						backgroundPosition: "center",
+					}}>
+					<Box
+						sx={{
+							position: "absolute",
+							inset: 0,
+							background:
+								"linear-gradient(160deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%)",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "flex-end",
+							p: 3.5,
+						}}>
+						<Typography
 							sx={{
-								marginLeft: "65px",
-								marginTop: "25px",
-								alignItems: "center",
+								color: "#fff",
+								fontSize: "26px",
+								fontWeight: 700,
+								lineHeight: 1.2,
+								letterSpacing: "-0.5px",
 							}}>
-							<h2>Login Form</h2>
+							{isSignup ? "Create your\naccount" : "Welcome\nback"}
+						</Typography>
+						<Typography
+							sx={{ color: "rgba(255,255,255,0.65)", fontSize: "13px", mt: 1 }}>
+							{isSignup
+								? "Join us and enjoy all features"
+								: "Sign in to continue your journey"}
+						</Typography>
+					</Box>
+				</Box>
+
+				{/* Right — Form Panel */}
+				<Stack
+					sx={{
+						flex: 1,
+						p: "36px 40px",
+						justifyContent: "center",
+						position: "relative",
+						backgroundColor: "#fff",
+					}}>
+					{/* Close Button */}
+					<IconButton
+						onClick={handleClose}
+						size="small"
+						sx={{
+							position: "absolute",
+							top: 16,
+							right: 16,
+							color: "text.secondary",
+						}}>
+						<CloseIcon fontSize="small" />
+					</IconButton>
+
+					{/* Title */}
+					<Typography
+						sx={{
+							fontSize: "22px",
+							fontWeight: 700,
+							color: "#111",
+							mb: 0.5,
+							letterSpacing: "-0.3px",
+						}}>
+						{isSignup ? "Sign Up" : "Sign In"}
+					</Typography>
+					<Typography sx={{ fontSize: "13px", color: "text.secondary", mb: 3 }}>
+						{isSignup
+							? "Fill in the form to create your account"
+							: "Enter your credentials to access your account"}
+					</Typography>
+
+					{/* Fields */}
+					<Stack gap={2}>
+						<TextField
+							label="Username"
+							variant="outlined"
+							size="small"
+							fullWidth
+							onChange={(e) => setMemberNick(e.target.value)}
+							sx={fieldSx}
+						/>
+
+						{isSignup && (
 							<TextField
-								id="outlined-basic"
-								label="username"
+								label="Phone Number"
 								variant="outlined"
-								sx={{ my: "10px" }}
-								onChange={handleUsername}
+								size="small"
+								fullWidth
+								onChange={(e) => setMemberPhone(e.target.value)}
+								sx={fieldSx}
 							/>
-							<TextField
-								id={"outlined-basic"}
-								label={"password"}
-								variant={"outlined"}
-								type={"password"}
-								onChange={handlePassword}
-								onKeyDown={handlePasswordKeyDown}
-							/>
-							<Fab
-								sx={{ marginTop: "27px", width: "120px" }}
-								variant={"extended"}
-								color={"primary"}
-								onClick={handleLoginRequest}>
-								<LoginIcon sx={{ mr: 1 }} />
-								Login
-							</Fab>
-						</Stack>
+						)}
+
+						<TextField
+							label="Password"
+							variant="outlined"
+							size="small"
+							fullWidth
+							type={showPassword ? "text" : "password"}
+							onChange={(e) => setMemberPassword(e.target.value)}
+							onKeyDown={handlePasswordKeyDown}
+							sx={fieldSx}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											size="small"
+											onClick={() => setShowPassword((v) => !v)}
+											edge="end">
+											{showPassword ? (
+												<VisibilityOff fontSize="small" />
+											) : (
+												<Visibility fontSize="small" />
+											)}
+										</IconButton>
+									</InputAdornment>
+								),
+							}}
+						/>
 					</Stack>
-				</Fade>
-			</Modal>
-		</div>
+
+					{/* Submit */}
+					<Button
+						fullWidth
+						variant="contained"
+						size="large"
+						startIcon={isSignup ? <SignupIcon /> : <LoginIcon />}
+						onClick={isSignup ? handleSignupRequest : handleLoginRequest}
+						sx={{
+							mt: 3,
+							borderRadius: "10px",
+							textTransform: "none",
+							fontWeight: 600,
+							fontSize: "15px",
+							py: 1.3,
+							backgroundColor: "#111",
+							"&:hover": { backgroundColor: "#333" },
+						}}>
+						{isSignup ? "Create Account" : "Sign In"}
+					</Button>
+				</Stack>
+			</DialogContent>
+		</Dialog>
 	);
 }
+
+const fieldSx = {
+	"& .MuiOutlinedInput-root": {
+		borderRadius: "10px",
+		fontSize: "14px",
+	},
+	"& .MuiInputLabel-root": {
+		fontSize: "14px",
+	},
+};

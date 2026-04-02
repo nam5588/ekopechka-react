@@ -25,6 +25,7 @@ import { serverApi } from "../../../lib/config";
 import "../../../css/home.css";
 import { ProductType } from "../../../lib/enums/product.enum";
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
 
 const categories = [
 	{ label: "All", value: undefined },
@@ -50,7 +51,12 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
 	products,
 }));
 
-export default function Products() {
+interface ProductsProps {
+	onAdd: (item: CartItem) => void;
+}
+
+export default function Products(props: ProductsProps) {
+	const { onAdd } = props;
 	const favLike: boolean = true;
 	const { setProducts } = actionDispatch(useDispatch());
 	const { products } = useSelector(productsRetriever);
@@ -207,7 +213,20 @@ export default function Products() {
 																{product.productViews}
 															</span>
 														</div>
-														<Button className="product-add-btn" fullWidth>
+														<Button
+															onClick={(e) => {
+																console.log("BUTTON PRESSED");
+																onAdd({
+																	_id: product._id,
+																	quantity: 1,
+																	name: product.productName,
+																	price: product.productPrice,
+																	image: product.productImages[0],
+																});
+																e.stopPropagation();
+															}}
+															className="product-add-btn"
+															fullWidth>
 															Add to Cart
 														</Button>
 													</div>

@@ -1,11 +1,49 @@
 import React, { useState } from "react";
 import "../../../css/modal.css";
 
-import { Stack, Container, Box, Button, Badge } from "@mui/material";
+import {
+	Stack,
+	Container,
+	Box,
+	Button,
+	Badge,
+	MenuItem,
+	ListItemIcon,
+	Menu,
+} from "@mui/material";
 import { NavLink } from "react-router-dom";
+import Basket from "./Basket";
+import { CartItem } from "../../../lib/types/search";
+import { Logout } from "@mui/icons-material";
+import { useGlobals } from "../../hooks/useGlobals";
 
-export default function Navbar() {
-	const authMember = false;
+interface NavbarProps {
+	cartItems: CartItem[];
+	onAdd: (item: CartItem) => void;
+	onRemove: (item: CartItem) => void;
+	onDelete: (item: CartItem) => void;
+	onDeleteAll: () => void;
+	setLoginOpen: (isOpen: boolean) => void;
+	handleLogoutClick: (e: React.MouseEvent<HTMLElement>) => void;
+	handleLogoutClose: (e: React.MouseEvent<HTMLElement>) => void;
+	handleLogoutRequest: () => void;
+	anchorEl: HTMLElement | null;
+}
+
+export default function Navbar(props: NavbarProps) {
+	const {
+		cartItems,
+		onAdd,
+		onRemove,
+		onDelete,
+		onDeleteAll,
+		setLoginOpen,
+		handleLogoutClick,
+		handleLogoutClose,
+		handleLogoutRequest,
+		anchorEl,
+	} = props;
+	const { authMember } = useGlobals();
 	return (
 		<div className="navbar">
 			<Container className="navbar-container">
@@ -60,17 +98,13 @@ export default function Navbar() {
 								Help
 							</NavLink>
 						</Box>
-						<Box className={"hover-line"}>
-							<Badge badgeContent={5} color="success">
-								<img
-									className="basket-btn"
-									src="/icons/basket.svg"
-									alt="basket"
-									onClick={() => alert("aaa")}
-								/>
-							</Badge>
-						</Box>
-						{/* <BasketModalProps /> */}
+						<Basket
+							onAdd={onAdd}
+							cartItems={cartItems}
+							onRemove={onRemove}
+							onDeleteAll={onDeleteAll}
+							onDelete={onDelete}
+						/>
 						{authMember ? (
 							<Box sx={{ borderRadius: "50%" }}>
 								<img
@@ -78,12 +112,58 @@ export default function Navbar() {
 									src="/icons/user-default.svg"
 									aria-haspopup={"true"}
 									alt=""
+									onClick={handleLogoutClick}
 									style={{ borderRadius: "50%" }}
 								/>
 							</Box>
 						) : (
-							<Button sx={{ background: "#6b8e6f !important;" }}>LOGIN</Button>
+							<Button
+								onClick={() => setLoginOpen(true)}
+								sx={{ background: "#6b8e6f !important;" }}>
+								LOGIN
+							</Button>
 						)}
+						<Menu
+							anchorEl={anchorEl}
+							id="account-menu"
+							open={Boolean(anchorEl)}
+							onClose={handleLogoutClose}
+							onClick={handleLogoutClose}
+							PaperProps={{
+								elevation: 0,
+								sx: {
+									overflow: "visible",
+									filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+									mt: 1.5,
+									"& .MuiAvatar-root": {
+										width: 32,
+										height: 32,
+										ml: -0.5,
+										mr: 1,
+									},
+									"&:before": {
+										content: '""',
+										display: "block",
+										position: "absolute",
+										top: 0,
+										right: 14,
+										width: 10,
+										height: 10,
+										bgcolor: "background.paper",
+										transform: "translateY(-50%) rotate(45deg)",
+										zIndex: 0,
+									},
+								},
+							}}
+							transformOrigin={{ horizontal: "right", vertical: "top" }}
+							anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+							<MenuItem onClick={handleLogoutRequest}>
+								<ListItemIcon>
+									<Logout fontSize="small" style={{ color: "blue" }} />
+								</ListItemIcon>
+								Logout
+							</MenuItem>
+						</Menu>
 					</Stack>
 				</Stack>
 			</Container>

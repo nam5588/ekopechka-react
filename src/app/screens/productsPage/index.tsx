@@ -4,8 +4,14 @@ import ChosenProduct from "./ChosenProduct";
 import Products from "./Products";
 import "../../../css/products.css";
 import { Container } from "@mui/material";
+import { CartItem } from "../../../lib/types/search";
 
-export default function ProductsPage() {
+interface ProductPageProps {
+	onAdd: (item: CartItem) => void;
+}
+
+export default function ProductsPage(props: ProductPageProps) {
+	const { onAdd } = props;
 	const products = useRouteMatch();
 
 	return (
@@ -21,10 +27,10 @@ export default function ProductsPage() {
 			</div>
 			<Switch>
 				<Route path={`${products.path}/:productId`}>
-					<ChosenProduct />
+					<ChosenProduct onAdd={onAdd} />
 				</Route>
 				<Route path={`${products.path}`}>
-					<Products />
+					<Products onAdd={onAdd} />
 				</Route>
 			</Switch>
 		</div>

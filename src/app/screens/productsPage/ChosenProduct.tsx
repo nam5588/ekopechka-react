@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { serverApi } from "../../../lib/config";
 import ProductService from "../../services/ProductService";
 import { retrieveNewProductsSug, retrieveChosenProduct } from "./selector";
+import { CartItem } from "../../../lib/types/search";
 
 const actionDispatch = (dispatch: Dispatch) => ({
 	setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
@@ -35,7 +36,12 @@ const newProductsSugRetriever = createSelector(
 	}),
 );
 
-export default function ChosenProduct() {
+interface ChosenProductProps {
+	onAdd: (item: CartItem) => void;
+}
+
+export default function ChosenProduct(props: ChosenProductProps) {
+	const { onAdd } = props;
 	const { setChosenProduct, setNewProductsSug } = actionDispatch(useDispatch());
 	const { product } = useSelector(chosenProductRetriever);
 	const { newProductsSug } = useSelector(newProductsSugRetriever);
@@ -58,7 +64,7 @@ export default function ChosenProduct() {
 	const chooseDishHandler = (id: string) => {
 		history.push(`/products/${id}`);
 	};
-
+	if (!product) return null;
 	return (
 		<div className="chosen-page">
 			<div className="chosen-card">
@@ -105,7 +111,19 @@ export default function ChosenProduct() {
 							</span>
 						</div>
 
-						<Button className="chosen-btn-cart" fullWidth>
+						<Button
+							className="chosen-btn-cart"
+							fullWidth
+							onClick={(e) => {
+								onAdd({
+									_id: product._id,
+									quantity: 1,
+									name: product.productName,
+									price: product.productPrice,
+									image: product.productImages[0],
+								});
+								e.stopPropagation();
+							}}>
 							Add to Cart
 						</Button>
 					</div>
