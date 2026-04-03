@@ -17,13 +17,19 @@ import {
 	sweetErrorHandling,
 	sweetTopSmallSuccessAlert,
 } from "../../../lib/sweetAlert";
-import { Messages } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
 import MemberService from "../../services/MemberService";
+import { useHistory } from "react-router-dom";
 
 export default function UserPage() {
 	const { authMember, setAuthMember } = useGlobals();
+	const history = useHistory();
+
+	const imagePath = authMember?.memberImage
+		? `${serverApi}/${authMember.memberImage}`
+		: "/icons/user-default.svg";
 	const [editing, setEditing] = useState(false);
 	const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
 		{
@@ -85,6 +91,8 @@ export default function UserPage() {
 			}
 
 			const member = new MemberService();
+			console.log("test===:", memberUpdateInput);
+
 			const result = await member.updateMember(memberUpdateInput);
 			setAuthMember(result);
 			await sweetTopSmallSuccessAlert("Modified successfully", 700);
@@ -106,6 +114,7 @@ export default function UserPage() {
 		setMemberImage(authMember?.memberImage ?? "/icons/user-default.svg");
 		setEditing(false);
 	};
+	if (!authMember) history.push("/");
 
 	return (
 		<div className="user-page">
@@ -124,7 +133,7 @@ export default function UserPage() {
 						{/* Left — Avatar Card */}
 						<div className="user-avatar-card">
 							<img
-								src={memberImage}
+								src={imagePath}
 								alt={authMember?.memberNick}
 								className="user-avatar-img"
 							/>

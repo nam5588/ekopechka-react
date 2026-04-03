@@ -6,7 +6,6 @@ import {
 	Container,
 	Box,
 	Button,
-	Badge,
 	MenuItem,
 	ListItemIcon,
 	Menu,
@@ -16,6 +15,7 @@ import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { Logout } from "@mui/icons-material";
 import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
 
 interface NavbarProps {
 	cartItems: CartItem[];
@@ -44,6 +44,9 @@ export default function Navbar(props: NavbarProps) {
 		anchorEl,
 	} = props;
 	const { authMember } = useGlobals();
+	const imagePath = authMember?.memberImage
+		? `${serverApi}/${authMember.memberImage}`
+		: "/icons/user-default.svg";
 	return (
 		<div className="navbar">
 			<Container className="navbar-container">
@@ -109,7 +112,7 @@ export default function Navbar(props: NavbarProps) {
 							<Box sx={{ borderRadius: "50%" }}>
 								<img
 									className="user-avatar"
-									src={authMember?.memberImage ?? "/icons/user-default.svg"}
+									src={imagePath}
 									aria-haspopup={"true"}
 									alt=""
 									onClick={handleLogoutClick}

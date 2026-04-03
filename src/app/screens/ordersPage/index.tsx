@@ -7,6 +7,8 @@ import {
 	LocalShippingOutlined,
 } from "@mui/icons-material";
 import "../../../css/orders.css";
+import { useHistory } from "react-router-dom";
+import { useGlobals } from "../../hooks/useGlobals";
 
 const orders = [
 	{
@@ -53,6 +55,11 @@ function StepIcon({ icon, done }: { icon: string; done: boolean }) {
 }
 
 export default function OrdersPage() {
+	const { authMember } = useGlobals();
+
+	const history = useHistory();
+
+	if (!authMember) history.push("/");
 	return (
 		<div className="orders-page">
 			{/* Hero */}
