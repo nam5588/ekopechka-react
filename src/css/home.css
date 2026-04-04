@@ -87,8 +87,8 @@
 
 .welcome-img {
 	width: 100%;
-	max-width: 580px;
-	height: 350px;
+	max-width: 900px;
+	height: 400px;
 	object-fit: cover;
 	border-radius: 20px;
 }

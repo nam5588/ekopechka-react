@@ -22,8 +22,9 @@
 }
 
 .brand-logo {
-	width: 44px;
-	height: 44px;
+	margin-top: 10px;
+	width: 66px;
+	height: auto;
 	transition: opacity 0.2s ease;
 }
 
