@@ -37,7 +37,7 @@ export default function Articles() {
 
 	const [articleSearch, setArticleSearch] = useState<ArticleInquiry>({
 		page: 1,
-		limit: 8,
+		limit: 4,
 		order: "createdAt",
 		search: "",
 		articleCategory: undefined,

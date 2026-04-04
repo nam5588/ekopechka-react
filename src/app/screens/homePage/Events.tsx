@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { FavoriteBorder, Visibility } from "@mui/icons-material";
 import { createSelector } from "@reduxjs/toolkit";
 import { retrievePopularArticles } from "./selector";
@@ -15,6 +15,11 @@ const popularArticleRetriever = createSelector(
 
 export default function Events() {
 	const { popularArticles } = useSelector(popularArticleRetriever);
+	const history = useHistory();
+
+	const chooseArticleHandler = (id: string) => {
+		history.push(`/articles/${id}`);
+	};
 
 	return (
 		<div className="events-frame">
@@ -39,7 +44,10 @@ export default function Events() {
 						});
 
 						return (
-							<div id={article._id} className="article-card">
+							<div
+								id={article._id}
+								className="article-card"
+								onClick={() => chooseArticleHandler(article._id)}>
 								<div className="article-img-wrap">
 									<img
 										src={`${serverApi}/${article.articleImage}`}
