@@ -42,8 +42,10 @@ class OrderService {
 		try {
 			// axios.defaults.withCredentials = true
 			const url = `${this.path}/order/all`;
-			const query = `?page=${input.page}&limit=${input.limit}&orderStatus=${input.orderStatus}`;
-
+			let query = `?page=${input.page}&limit=${input.limit}`;
+			if (input.orderStatus) {
+				query += `&orderStatus=${input.orderStatus}`;
+			}
 			const result = await axios.get(url + query, { withCredentials: true });
 			console.log("GET MY ORDERS RES", result);
 			return result.data;

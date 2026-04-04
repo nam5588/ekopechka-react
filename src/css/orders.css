@@ -249,7 +249,6 @@
 	box-shadow: none !important;
 	transition: background 0.2s ease !important;
 }
-
 .order-btn-track.MuiButton-root:hover {
 	background: #5a7a5e !important;
 }
@@ -286,4 +285,32 @@
 	.order-header-row {
 		grid-template-columns: 1fr;
 	}
+}
+
+.orders-empty {
+	text-align: center;
+	padding: 60px 20px;
+}
+
+.orders-empty-icon {
+	font-size: 64px !important;
+	color: #a5b4a0;
+	margin-bottom: 16px;
+}
+
+.orders-empty h3 {
+	font-size: 22px;
+	margin-bottom: 8px;
+}
+
+.orders-empty p {
+	color: #777;
+	margin-bottom: 24px;
+}
+
+.orders-empty-btn {
+	background-color: #4a7c59 !important;
+	color: white !important;
+	padding: 10px 32px !important;
+	border-radius: 8px !important;
 }
