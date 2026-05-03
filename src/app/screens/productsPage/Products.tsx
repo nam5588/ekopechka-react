@@ -16,8 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductService from "../../services/ProductService";
 import { setProducts } from "./slice";
 import {
-	Favorite,
-	FavoriteBorder,
 	Star,
 	Visibility,
 } from "@mui/icons-material";
@@ -58,7 +56,6 @@ interface ProductsProps {
 
 export default function Products(props: ProductsProps) {
 	const { onAdd } = props;
-	const favLike: boolean = true;
 	const { setProducts } = actionDispatch(useDispatch());
 	const { products } = useSelector(productsRetriever);
 
@@ -187,13 +184,10 @@ export default function Products(props: ProductsProps) {
 															alt={product.productName}
 															className="product-img"
 														/>
-														<button className="product-wish-btn">
-															{favLike ? (
-																<Favorite className="product-wish-icon" />
-															) : (
-																<FavoriteBorder className="product-wish-icon" />
-															)}
-														</button>
+														<div
+															className={`product-count-badge ${product.productLeftCount <= 10 ? "low" : "enough"}`}>
+															Available: {product.productLeftCount}
+														</div>
 													</div>
 													<div className="product-body">
 														<h3 className="product-name">
@@ -208,13 +202,11 @@ export default function Products(props: ProductsProps) {
 															</span>
 															<span className="product-rating">
 																<Star className="star-icon" />
+																<Star className="star-icon" />
+																<Star className="star-icon" />
 															</span>
 														</div>
 														<div className="product-meta">
-															<span className="product-meta-item">
-																<FavoriteBorder fontSize="small" />{" "}
-																{product.productLikes}
-															</span>
 															<span className="product-meta-item">
 																<Visibility fontSize="small" />{" "}
 																{product.productViews}

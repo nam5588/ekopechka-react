@@ -6,8 +6,6 @@ import { createSelector } from "@reduxjs/toolkit";
 import { retrievePopularProducts } from "./selector";
 import { useSelector } from "react-redux";
 import {
-	Favorite,
-	FavoriteBorder,
 	Star,
 	Visibility,
 } from "@mui/icons-material";
@@ -30,7 +28,6 @@ export default function PopularProducts(props: PopularProductsProps) {
 	const history = useHistory();
 
 	const { popularProducts } = useSelector(popularProductRetriever);
-	const favLike: boolean = true;
 
 	const chooseDishHandler = (id: string) => {
 		history.push(`/products/${id}`);
@@ -65,13 +62,10 @@ export default function PopularProducts(props: PopularProductsProps) {
 										alt={product.productName}
 										className="product-img"
 									/>
-									<button className="product-wish-btn">
-										{favLike ? (
-											<Favorite className="product-wish-icon" />
-										) : (
-											<FavoriteBorder className="product-wish-icon" />
-										)}
-									</button>
+									<div
+										className={`product-count-badge ${product.productLeftCount <= 10 ? "low" : "enough"}`}>
+										Available: {product.productLeftCount}
+									</div>
 								</div>
 								<div className="product-body">
 									<h3 className="product-name">{product.productName}</h3>
@@ -82,12 +76,11 @@ export default function PopularProducts(props: PopularProductsProps) {
 										</span>
 										<span className="product-rating">
 											<Star className="star-icon" />
+											<Star className="star-icon" />
+											<Star className="star-icon" />
 										</span>
 									</div>
 									<div className="product-meta">
-										<span className="product-meta-item">
-											<FavoriteBorder fontSize="small" /> {product.productLikes}
-										</span>
 										<span className="product-meta-item">
 											<Visibility fontSize="small" /> {product.productViews}
 										</span>

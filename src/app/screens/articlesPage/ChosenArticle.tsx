@@ -13,7 +13,7 @@ import "../../../css/articles.css";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { Article } from "../../../lib/types/article";
 import { setChosenArticle, setNewArticlesSug } from "./slice";
-import { retrieveChosenArticle, retrieveNewArticlesSug } from "./selector";
+import { retrieveChosenArticle } from "./selector";
 import { useDispatch, useSelector } from "react-redux";
 import ArticleService from "../../services/ArticleService";
 import { serverApi } from "../../../lib/config";
@@ -30,17 +30,9 @@ const chosenArticleRetriever = createSelector(
 	}),
 );
 
-const newArticleSugRetriever = createSelector(
-	retrieveNewArticlesSug,
-	(newArticlesSug) => ({
-		newArticlesSug,
-	}),
-);
-
 export default function ChosenArticle() {
 	const { setChosenArticle, setNewArticlesSug } = actionDispatch(useDispatch());
 	const { article } = useSelector(chosenArticleRetriever);
-	const { newArticlesSug } = useSelector(newArticleSugRetriever);
 
 	const { articleId } = useParams<{ articleId: string }>();
 	const history = useHistory();
@@ -63,9 +55,6 @@ export default function ChosenArticle() {
 			.catch((err) => console.log(err));
 	}, [articleId]);
 
-	const chooseArticleHandler = (id: string) => {
-		history.push(`/article/${id}`);
-	};
 	if (!article) return null;
 
 	return (

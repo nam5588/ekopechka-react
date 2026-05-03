@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "@mui/material";
-import {
-	FavoriteBorder,
-	Visibility,
-	ArrowBack,
-	CheckCircleOutline,
-} from "@mui/icons-material";
+import { Visibility, ArrowBack, CheckCircleOutline } from "@mui/icons-material";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import { useHistory, useParams } from "react-router-dom";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { setChosenProduct, setNewProductsSug } from "./slice";
@@ -111,8 +107,8 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
 						<div className="chosen-meta">
 							<span className="chosen-meta-item">
-								<FavoriteBorder fontSize="small" />
-								{product?.productLikes} likes
+								<Inventory2OutlinedIcon fontSize="small" />
+								{product?.productLeftCount} left
 							</span>
 							<span className="chosen-meta-item">
 								<Visibility fontSize="small" />
@@ -165,6 +161,9 @@ export default function ChosenProduct(props: ChosenProductProps) {
 									<div className="related-bottom">
 										<span className="related-price">
 											${product.productPrice}
+										</span>
+										<span className="related-price">
+											In Stock: {product.productLeftCount}
 										</span>
 									</div>
 								</div>

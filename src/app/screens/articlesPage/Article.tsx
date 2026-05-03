@@ -145,9 +145,7 @@ export default function Articles() {
 											<CalendarToday fontSize="small" />{" "}
 											{new Date(article.createdAt).toLocaleDateString("en-GB")}
 										</span>
-										<span className="article-list-meta-item">
-											<FavoriteBorder fontSize="small" /> {article.articleLikes}
-										</span>
+
 										<span className="article-list-meta-item">
 											<Visibility fontSize="small" /> {article.articleViews}
 										</span>
