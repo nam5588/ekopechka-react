@@ -17,7 +17,7 @@ import {
 	sweetErrorHandling,
 	sweetTopSmallSuccessAlert,
 } from "../../../lib/sweetAlert";
-import { Messages, serverApi, getImageUrl } from "../../../lib/config";
+import { Messages, getImageUrl } from "../../../lib/config";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
 import MemberService from "../../services/MemberService";
@@ -39,8 +39,7 @@ export default function UserPage() {
 	);
 
 	const [previewImage, setPreviewImage] = useState<string>(
-		authMember?.memberImage
-			getImageUrl(authMember.memberImage),
+		getImageUrl(authMember?.memberImage),
 	);
 
 	/** HANDLERS **/
@@ -109,11 +108,7 @@ export default function UserPage() {
 			memberDesc: authMember?.memberDesc,
 			memberImage: authMember?.memberImage,
 		});
-		setPreviewImage(
-			authMember?.memberImage
-				? `${serverApi}/${authMember.memberImage}`
-				: "/icons/user-default.svg",
-		);
+		setPreviewImage(getImageUrl(authMember?.memberImage));
 		setEditing(false);
 	};
 	if (!authMember) history.push("/");
