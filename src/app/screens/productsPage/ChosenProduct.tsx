@@ -16,6 +16,7 @@ import { serverApi } from "../../../lib/config";
 import ProductService from "../../services/ProductService";
 import { retrieveNewProductsSug, retrieveChosenProduct } from "./selector";
 import { CartItem } from "../../../lib/types/search";
+import { ProductStatus } from "../../../lib/enums/product.enum";
 
 const actionDispatch = (dispatch: Dispatch) => ({
 	setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
@@ -64,6 +65,9 @@ export default function ChosenProduct(props: ChosenProductProps) {
 	const chooseDishHandler = (id: string) => {
 		history.push(`/products/${id}`);
 	};
+
+	const productSoldout = product?.productStatus === ProductStatus.SOLDOUT;
+
 	if (!product) return null;
 	return (
 		<div className="chosen-page">
@@ -78,6 +82,11 @@ export default function ChosenProduct(props: ChosenProductProps) {
 				{/* Main */}
 				<div className="chosen-main">
 					<div className="chosen-img-wrap">
+						{productSoldout && (
+							<div className="sold-out">
+								<span>Sold Out</span>
+							</div>
+						)}
 						<img
 							src={`${serverApi}/${product?.productImages[0]}`}
 							alt={""}
@@ -95,7 +104,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
 						<div className="chosen-stock">
 							<CheckCircleOutline fontSize="small" />
-							In Stock
+							{productSoldout ? "Sold Out" : "In Stock"}
 						</div>
 
 						<div className="chosen-divider" />
@@ -111,21 +120,23 @@ export default function ChosenProduct(props: ChosenProductProps) {
 							</span>
 						</div>
 
-						<Button
-							className="chosen-btn-cart"
-							fullWidth
-							onClick={(e) => {
-								onAdd({
-									_id: product._id,
-									quantity: 1,
-									name: product.productName,
-									price: product.productPrice,
-									image: product.productImages[0],
-								});
-								e.stopPropagation();
-							}}>
-							Add to Cart
-						</Button>
+						{!productSoldout && (
+							<Button
+								className="chosen-btn-cart"
+								fullWidth
+								onClick={(e) => {
+									onAdd({
+										_id: product._id,
+										quantity: 1,
+										name: product.productName,
+										price: product.productPrice,
+										image: product.productImages[0],
+									});
+									e.stopPropagation();
+								}}>
+								Add to Cart
+							</Button>
+						)}
 					</div>
 				</div>
 

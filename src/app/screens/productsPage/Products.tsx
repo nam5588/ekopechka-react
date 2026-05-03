@@ -22,8 +22,9 @@ import {
 	Visibility,
 } from "@mui/icons-material";
 import { serverApi } from "../../../lib/config";
+// @ts-ignore
 import "../../../css/home.css";
-import { ProductType } from "../../../lib/enums/product.enum";
+import { ProductStatus, ProductType } from "../../../lib/enums/product.enum";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 
@@ -174,7 +175,13 @@ export default function Products(props: ProductsProps) {
 													onClick={() => chooseDishHandler(product._id)}
 													key={product._id}
 													className="product-card">
-													<div className="product-img-wrap">
+													<div className={`product-img-wrap`}>
+														{product.productStatus ===
+															ProductStatus.SOLDOUT && (
+															<div className="sold-out">
+																<span>Sold Out</span>
+															</div>
+														)}
 														<img
 															src={imagePath}
 															alt={product.productName}
@@ -213,22 +220,33 @@ export default function Products(props: ProductsProps) {
 																{product.productViews}
 															</span>
 														</div>
-														<Button
-															onClick={(e) => {
-																console.log("BUTTON PRESSED");
-																onAdd({
-																	_id: product._id,
-																	quantity: 1,
-																	name: product.productName,
-																	price: product.productPrice,
-																	image: product.productImages[0],
-																});
-																e.stopPropagation();
-															}}
-															className="product-add-btn"
-															fullWidth>
-															Add to Cart
-														</Button>
+														{product.productStatus !== ProductStatus.SOLDOUT ? (
+															<Button
+																onClick={(e) => {
+																	console.log("BUTTON PRESSED");
+																	onAdd({
+																		_id: product._id,
+																		quantity: 1,
+																		name: product.productName,
+																		price: product.productPrice,
+																		image: product.productImages[0],
+																	});
+																	e.stopPropagation();
+																}}
+																className="product-add-btn"
+																fullWidth>
+																Add to Cart
+															</Button>
+														) : (
+															<Button
+																onClick={(e) => {
+																	e.stopPropagation();
+																}}
+																className="product-add-btn"
+																fullWidth>
+																Soon
+															</Button>
+														)}
 													</div>
 												</div>
 											);

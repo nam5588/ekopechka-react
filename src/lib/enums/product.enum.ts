@@ -7,6 +7,7 @@ export enum ProductType {
 
 export enum ProductStatus {
     SOON = "SOON",
+    SOLDOUT = "SOLDOUT",
     PAUSE = "PAUSE",
     PROCESS = "PROCESS",
     DELETE = "DELETE"

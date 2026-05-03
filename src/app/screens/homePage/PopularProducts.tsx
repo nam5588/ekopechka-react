@@ -13,6 +13,7 @@ import {
 } from "@mui/icons-material";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
+import { ProductStatus } from "../../../lib/enums/product.enum";
 
 /** REDUX SLICE & SELECTOR **/
 const popularProductRetriever = createSelector(
@@ -53,7 +54,12 @@ export default function PopularProducts(props: PopularProductsProps) {
 								onClick={() => chooseDishHandler(product._id)}
 								key={product._id}
 								className="product-card">
-								<div className="product-img-wrap">
+								<div className={`product-img-wrap`}>
+									{product.productStatus === ProductStatus.SOLDOUT && (
+										<div className="sold-out">
+											<span>Sold Out</span>
+										</div>
+									)}
 									<img
 										src={imagePath}
 										alt={product.productName}
@@ -86,22 +92,33 @@ export default function PopularProducts(props: PopularProductsProps) {
 											<Visibility fontSize="small" /> {product.productViews}
 										</span>
 									</div>
-									<Button
-										className="product-add-btn"
-										fullWidth
-										onClick={(e) => {
-											console.log("BUTTON PRESSED");
-											onAdd({
-												_id: product._id,
-												quantity: 1,
-												name: product.productName,
-												price: product.productPrice,
-												image: product.productImages[0],
-											});
-											e.stopPropagation();
-										}}>
-										Add to Cart
-									</Button>
+									{product.productStatus !== ProductStatus.SOLDOUT ? (
+										<Button
+											onClick={(e) => {
+												console.log("BUTTON PRESSED");
+												onAdd({
+													_id: product._id,
+													quantity: 1,
+													name: product.productName,
+													price: product.productPrice,
+													image: product.productImages[0],
+												});
+												e.stopPropagation();
+											}}
+											className="product-add-btn"
+											fullWidth>
+											Add to Cart
+										</Button>
+									) : (
+										<Button
+											onClick={(e) => {
+												e.stopPropagation();
+											}}
+											className="product-add-btn"
+											fullWidth>
+											Soon
+										</Button>
+									)}
 								</div>
 							</div>
 						);
