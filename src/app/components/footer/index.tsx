@@ -239,14 +239,15 @@ export default function Footer() {
 					<SocialRow>
 						<p>Follow us on social media</p>
 						<SocialIcons>
-							<a target="_blank" href="https://t.me/s/ekopechka">
+							<a target="_blank" rel="noreferrer" href="https://t.me/s/ekopechka">
 								<Telegram />
 							</a>
-							<a target="_blank" href="https://www.youtube.com/@Ekopechka">
+							<a target="_blank" rel="noreferrer" href="https://www.youtube.com/@Ekopechka">
 								<YouTube />
 							</a>
 							<a
 								target="_blank"
+								rel="noreferrer"
 								href="https://www.instagram.com/ekopechka?igshid=ZGUzMzM3NWJiOQ">
 								<Instagram />
 							</a>

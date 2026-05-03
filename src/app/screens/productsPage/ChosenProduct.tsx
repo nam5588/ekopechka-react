@@ -56,6 +56,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 				setNewProductsSug(data);
 			})
 			.catch((err) => console.log(err));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [productId]);
 
 	const chooseDishHandler = (id: string) => {

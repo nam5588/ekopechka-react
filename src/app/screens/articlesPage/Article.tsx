@@ -10,7 +10,7 @@ import { retrieveArticles } from "./selector";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import ArticleService from "../../services/ArticleService";
-import { CalendarToday, FavoriteBorder, Visibility } from "@mui/icons-material";
+import { CalendarToday, Visibility } from "@mui/icons-material";
 import { serverApi } from "../../../lib/config";
 
 const categories = [
@@ -52,6 +52,7 @@ export default function Articles() {
 			.getArticles(articleSearch)
 			.then((data) => setArticles(data))
 			.catch((err) => console.log(err));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [articleSearch]);
 
 	useEffect(() => {

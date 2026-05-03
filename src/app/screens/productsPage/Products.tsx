@@ -78,6 +78,7 @@ export default function Products(props: ProductsProps) {
 			.getProducts(productSearch)
 			.then((data) => setProducts(data))
 			.catch((err) => console.log(err));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [productSearch]);
 
 	useEffect(() => {

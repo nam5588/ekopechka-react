@@ -10,11 +10,7 @@ import "../../../css/orders.css";
 import { useHistory } from "react-router-dom";
 import { useGlobals } from "../../hooks/useGlobals";
 import { setOrders } from "./slice";
-import {
-	Order,
-	OrderInquiry,
-	OrderUpdateInput,
-} from "../../../lib/types/order";
+import { Order, OrderInquiry } from "../../../lib/types/order";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import OrderService from "../../services/OrderService";
@@ -50,10 +46,10 @@ const ordersRetriever = createSelector(retrieveOrders, (orders) => ({
 export default function OrdersPage() {
 	const { setOrders } = actionDispatch(useDispatch());
 	const { orders } = useSelector(ordersRetriever);
-	const { orderBuilder, authMember, setOrderBuilder } = useGlobals();
+	const { orderBuilder, authMember } = useGlobals();
 	const history = useHistory();
 
-	const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+	const [orderInquiry] = useState<OrderInquiry>({
 		page: 1,
 		limit: 10,
 	});
@@ -64,10 +60,12 @@ export default function OrdersPage() {
 			.getMyOrders({ ...orderInquiry })
 			.then((data) => setOrders(data))
 			.catch((err) => console.log(err));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [orderInquiry, orderBuilder]);
 
 	useEffect(() => {
 		if (!authMember) history.push("/");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [authMember]);
 
 	useEffect(() => {

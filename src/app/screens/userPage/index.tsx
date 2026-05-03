@@ -41,8 +41,10 @@ export default function UserPage() {
 		},
 	);
 
-	const [memberImage, setMemberImage] = useState<string>(
-		authMember?.memberImage ?? "/icons/user-default.svg",
+	const [previewImage, setPreviewImage] = useState<string>(
+		authMember?.memberImage
+			? `${serverApi}/${authMember.memberImage}`
+			: "/icons/user-default.svg",
 	);
 
 	/** HANDLERS **/
@@ -55,7 +57,7 @@ export default function UserPage() {
 			sweetErrorHandling(Messages.error5).then();
 		} else {
 			setMemberUpdateInput((prev) => ({ ...prev, memberImage: file }));
-			setMemberImage(URL.createObjectURL(file));
+			setPreviewImage(URL.createObjectURL(file));
 		}
 	};
 
@@ -111,7 +113,11 @@ export default function UserPage() {
 			memberDesc: authMember?.memberDesc,
 			memberImage: authMember?.memberImage,
 		});
-		setMemberImage(authMember?.memberImage ?? "/icons/user-default.svg");
+		setPreviewImage(
+			authMember?.memberImage
+				? `${serverApi}/${authMember.memberImage}`
+				: "/icons/user-default.svg",
+		);
 		setEditing(false);
 	};
 	if (!authMember) history.push("/");
@@ -133,7 +139,7 @@ export default function UserPage() {
 						{/* Left — Avatar Card */}
 						<div className="user-avatar-card">
 							<img
-								src={imagePath}
+								src={previewImage}
 								alt={authMember?.memberNick}
 								className="user-avatar-img"
 							/>
