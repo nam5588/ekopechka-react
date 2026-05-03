@@ -27,9 +27,6 @@ export default function UserPage() {
 	const { authMember, setAuthMember } = useGlobals();
 	const history = useHistory();
 
-	const imagePath = authMember?.memberImage
-		? `${serverApi}/${authMember.memberImage}`
-		: "/icons/user-default.svg";
 	const [editing, setEditing] = useState(false);
 	const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
 		{
