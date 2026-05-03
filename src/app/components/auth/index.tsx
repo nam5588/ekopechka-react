@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -9,6 +9,7 @@ import {
 	Box,
 	IconButton,
 	InputAdornment,
+	Divider,
 } from "@mui/material";
 import {
 	Login as LoginIcon,
@@ -18,11 +19,12 @@ import {
 	VisibilityOff,
 } from "@mui/icons-material";
 import { T } from "../../../lib/types/common";
-import { Messages } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
+import axios from "axios";
 
 interface AuthenticationModalProps {
 	signupOpen: boolean;
@@ -42,6 +44,44 @@ export default function AuthenticationModal({
 	const [memberPassword, setMemberPassword] = useState<string>("");
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const { setAuthMember } = useGlobals();
+	const tgBtnRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!isOpen) return;
+		(window as T).onTelegramAuth = async (user: T) => {
+			try {
+				const res = await axios.post(
+					`${serverApi}/member/telegram-login`,
+					user,
+					{ withCredentials: true },
+				);
+				const { member, accessToken } = res.data;
+				localStorage.setItem("memberData", JSON.stringify(member));
+				localStorage.setItem("accessToken", accessToken);
+				setAuthMember(member);
+				handleClose();
+			} catch (err) {
+				sweetErrorHandling(err).then();
+			}
+		};
+
+		const container = tgBtnRef.current;
+		if (!container) return;
+		container.innerHTML = "";
+		const script = document.createElement("script");
+		script.src = "https://telegram.org/js/telegram-widget.js?22";
+		script.setAttribute("data-telegram-login", "EkoPechkabot");
+		script.setAttribute("data-size", "large");
+		script.setAttribute("data-onauth", "onTelegramAuth(user)");
+		script.setAttribute("data-request-access", "write");
+		script.async = true;
+		container.appendChild(script);
+
+		return () => {
+			if (container) container.innerHTML = "";
+			delete (window as T).onTelegramAuth;
+		};
+	}, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const isSignup = signupOpen;
 	const isOpen = signupOpen || loginOpen;
@@ -256,6 +296,12 @@ export default function AuthenticationModal({
 						}}>
 						{isSignup ? "Create Account" : "Sign In"}
 					</Button>
+
+					<Divider sx={{ my: 2, fontSize: "12px", color: "text.secondary" }}>
+						or continue with
+					</Divider>
+
+					<Box ref={tgBtnRef} sx={{ display: "flex", justifyContent: "center" }} />
 				</Stack>
 			</DialogContent>
 		</Dialog>
