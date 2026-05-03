@@ -1,46 +1,114 @@
-# Getting Started with Create React App
+# Ekopechka — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+React SPA (Single Page Application) for the Ekopechka e-commerce platform. Connects to the Ekopechka backend API.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+- **Framework:** React 18 + TypeScript
+- **Routing:** React Router DOM v5
+- **State management:** Redux Toolkit
+- **UI library:** MUI (Material UI v5) + MUI Joy
+- **HTTP client:** Axios
+- **Styling:** CSS + styled-components + Emotion
+- **Alerts:** SweetAlert2
+- **Carousel:** Swiper
+- **Auth cookies:** universal-cookie
+- **Dates:** moment.js
 
-### `npm start`
+## Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+src/
+├── app/
+│   ├── App.tsx                 # Root component with routing
+│   ├── store.ts                # Redux store
+│   ├── context/                # Auth context (useGlobals)
+│   ├── hooks/                  # useBasket, useGlobals
+│   ├── components/
+│   │   ├── headers/            # Navbar, Basket drawer
+│   │   ├── footer/
+│   │   ├── auth/               # Login & signup modals
+│   │   └── PaymeButton.tsx     # Payme payment button
+│   ├── screens/
+│   │   ├── homePage/           # Hero, PopularProducts, NewProducts, Events, Services, Statistics
+│   │   ├── productsPage/       # Product list + product detail
+│   │   ├── articlesPage/       # Article list + article detail
+│   │   ├── ordersPage/         # Order history & management
+│   │   ├── userPage/           # User profile page
+│   │   └── helpPage/           # Help & contact
+│   └── services/               # Axios API service classes
+├── lib/
+│   ├── enums/                  # Shared TypeScript enums
+│   ├── types/                  # TypeScript interfaces
+│   └── sweetAlert.ts           # Alert helpers
+└── css/                        # Per-page stylesheets
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js >= 16
+- Ekopechka backend running (see [ekopechka](../ekopechka))
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone <repo-url>
+cd ekopechka-react
+yarn install
+# or
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Environment Variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create a `.env` file in the root:
 
-### `npm run eject`
+```env
+REACT_APP_API_URL=http://localhost:3003
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Running
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Development
+yarn start
+# or
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Build
 
-## Learn More
+```bash
+yarn build
+# or
+npm run build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Pages
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Route        | Description                     |
+|--------------|---------------------------------|
+| `/`          | Home — hero, products, events   |
+| `/products`  | Product catalog & detail        |
+| `/articles`  | Blog articles & detail          |
+| `/orders`    | User order history              |
+| `/my-page`   | User profile & settings         |
+| `/help`      | Help & contact form             |
+
+## Features
+
+- Browse and filter products by category
+- Add products to basket and manage quantities
+- Stripe & Payme payment support
+- User registration and login via modal
+- View and manage personal orders
+- Read articles with like and view tracking
+- Fully responsive layout
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

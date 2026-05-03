@@ -27,6 +27,7 @@ import {
 	sweetTopSuccessAlert,
 } from "../../../lib/sweetAlert";
 import { T } from "../../../lib/types/common";
+import axios from "axios";
 
 function StepIcon({ icon, done }: { icon: string; done: boolean }) {
 	return (
@@ -69,6 +70,14 @@ export default function OrdersPage() {
 		if (!authMember) history.push("/");
 	}, [authMember]);
 
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search);
+		if (params.get("payment") === "success") {
+			sweetTopSuccessAlert("Your order has been paid successfully! 🎉");
+			window.history.replaceState({}, "", "/orders");
+		}
+	}, []);
+
 	/** HANDLERS **/
 	const finishedOrderHandler = async (e: T) => {
 		try {
@@ -79,39 +88,24 @@ export default function OrdersPage() {
 				"Do you want to process with payment?",
 			);
 			if (confirmation) {
-				const order = new OrderService();
+				const order = orders.find((o: Order) => o._id === orderId);
+				if (!order) throw new Error("Order not found");
 
-				const input: OrderUpdateInput = {
-					orderId: orderId,
-					orderStatus: OrderStatus.PROCESS,
-				};
-				await order.updateOrder(input);
-				setOrderBuilder(new Date());
-
-				const timer = setTimeout(async () => {
-					try {
-						const inputFinish: OrderUpdateInput = {
-							orderId: orderId,
-							orderStatus: OrderStatus.FINISH,
-						};
-						await order.updateOrder(inputFinish);
-						setOrderBuilder(new Date());
-						sweetTopSuccessAlert("Your order has been delivered successfully");
-					} catch (err) {
-						sweetErrorHandling(err).then();
-					}
-				}, 10000);
-				// 259200000 - 3 days
-				// 10000 - 10 sec
-
-				return () => clearTimeout(timer);
+				const res = await axios.post(
+					"http://localhost:7007/api/stripe/create-session",
+					{
+						orderId: orderId,
+						amount: order.orderTotal,
+						orderName: `EkoPechka Order`,
+					},
+				);
+				window.location.href = res.data.url;
 			}
 		} catch (err) {
 			console.log(err);
 			sweetErrorHandling(err).then();
 		}
 	};
-
 	return (
 		<div className="orders-page">
 			{/* Hero */}
@@ -264,13 +258,23 @@ export default function OrdersPage() {
 
 								{/* Actions */}
 								<div className="order-actions">
-									<Button
-										onClick={finishedOrderHandler}
-										className="order-btn-track"
-										value={order._id}
-										fullWidth>
-										Next Step
-									</Button>
+									{order.orderStatus === OrderStatus.PAUSE ? (
+										<Button
+											onClick={finishedOrderHandler}
+											className="order-btn-track"
+											value={order._id}
+											fullWidth>
+											💳 Pay for order
+										</Button>
+									) : order.orderStatus === OrderStatus.PROCESS ? (
+										<Button className="order-btn-track" disabled fullWidth>
+											🔄 Processing
+										</Button>
+									) : (
+										<Button className="order-btn-track" disabled fullWidth>
+											✅ Delivered
+										</Button>
+									)}
 									<a href="/help">
 										<Button className="order-btn-support" fullWidth>
 											Contact Support
