@@ -79,7 +79,7 @@ export default function HomePage(props: HomePageProps) {
 				setPopularArticles(data);
 			})
 			.catch((err) => console.log(err));
-	});
+	}, []);
 
 	return (
 		<div>
