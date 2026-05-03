@@ -17,7 +17,7 @@ import OrderService from "../../services/OrderService";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import { retrieveOrders } from "./selector";
 import { Product } from "../../../lib/types/products";
-import { Messages } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import {
 	sweetErrorHandling,
 	sweetTopSuccessAlert,
@@ -90,7 +90,7 @@ export default function OrdersPage() {
 				if (!order) throw new Error("Order not found");
 
 				const res = await axios.post(
-					"http://localhost:7007/api/stripe/create-session",
+					`${serverApi}/api/stripe/create-session`,
 					{
 						orderId: orderId,
 						amount: order.orderTotal,
