@@ -46,6 +46,10 @@ export default function AuthenticationModal({
 	const { setAuthMember } = useGlobals();
 	const tgBtnRef = useRef<HTMLDivElement>(null);
 
+	const isSignup = signupOpen;
+	const isOpen = signupOpen || loginOpen;
+	const handleClose = isSignup ? handleSignupClose : handleLoginClose;
+
 	useEffect(() => {
 		if (!isOpen) return;
 		(window as T).onTelegramAuth = async (user: T) => {
@@ -82,10 +86,6 @@ export default function AuthenticationModal({
 			delete (window as T).onTelegramAuth;
 		};
 	}, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-	const isSignup = signupOpen;
-	const isOpen = signupOpen || loginOpen;
-	const handleClose = isSignup ? handleSignupClose : handleLoginClose;
 
 	/** HANDLERS **/
 	const handlePasswordKeyDown = (e: T) => {
