@@ -15,7 +15,7 @@ import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { Logout } from "@mui/icons-material";
 import { useGlobals } from "../../hooks/useGlobals";
-import { serverApi, getImageUrl } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 
 interface NavbarProps {
 	cartItems: CartItem[];
