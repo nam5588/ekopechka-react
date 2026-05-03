@@ -52,6 +52,7 @@ export default function AuthenticationModal({
 
 	useEffect(() => {
 		if (!isOpen) return;
+
 		(window as T).onTelegramAuth = async (user: T) => {
 			try {
 				const res = await axios.post(
@@ -69,20 +70,23 @@ export default function AuthenticationModal({
 			}
 		};
 
-		const container = tgBtnRef.current;
-		if (!container) return;
-		container.innerHTML = "";
-		const script = document.createElement("script");
-		script.src = "https://telegram.org/js/telegram-widget.js?22";
-		script.setAttribute("data-telegram-login", "EkoPechkabot");
-		script.setAttribute("data-size", "large");
-		script.setAttribute("data-onauth", "onTelegramAuth(user)");
-		script.setAttribute("data-request-access", "write");
-		script.async = true;
-		container.appendChild(script);
+		const timer = setTimeout(() => {
+			const container = tgBtnRef.current;
+			if (!container) return;
+			container.innerHTML = "";
+			const script = document.createElement("script");
+			script.src = "https://telegram.org/js/telegram-widget.js?22";
+			script.setAttribute("data-telegram-login", "EkoPechkabot");
+			script.setAttribute("data-size", "large");
+			script.setAttribute("data-onauth", "onTelegramAuth(user)");
+			script.setAttribute("data-request-access", "write");
+			script.async = true;
+			container.appendChild(script);
+		}, 300);
 
 		return () => {
-			if (container) container.innerHTML = "";
+			clearTimeout(timer);
+			if (tgBtnRef.current) tgBtnRef.current.innerHTML = "";
 			delete (window as T).onTelegramAuth;
 		};
 	}, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
