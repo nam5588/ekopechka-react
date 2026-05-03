@@ -8,6 +8,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useHistory } from "react-router-dom"; // hook useHistory
 import { CartItem } from "../../../lib/types/search";
+import { getImageUrl } from "../../../lib/config";
 import { Messages, serverApi } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
@@ -137,7 +138,7 @@ export default function Basket(props: BasketProps) {
 										</div>
 										<img
 											alt=""
-											src={`${serverApi}/${item.image}`}
+											src={getImageUrl(item.image)}
 											className={"product-img"}
 										/>
 										<span className={"product-name"}>{item.name}</span>

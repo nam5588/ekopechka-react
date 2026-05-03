@@ -16,7 +16,7 @@ import { setChosenArticle, setNewArticlesSug } from "./slice";
 import { retrieveChosenArticle } from "./selector";
 import { useDispatch, useSelector } from "react-redux";
 import ArticleService from "../../services/ArticleService";
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 
 const actionDispatch = (dispatch: Dispatch) => ({
 	setChosenArticle: (data: Article) => dispatch(setChosenArticle(data)),
@@ -71,7 +71,7 @@ export default function ChosenArticle() {
 				{/* Hero Image */}
 				<div className="chosen-article-img-wrap">
 					<img
-						src={`${serverApi}/${article.articleImage}`}
+						src={getImageUrl(article.articleImage)}
 						alt={""}
 						className="chosen-article-img"
 					/>

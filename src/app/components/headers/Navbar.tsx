@@ -15,7 +15,7 @@ import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
 import { Logout } from "@mui/icons-material";
 import { useGlobals } from "../../hooks/useGlobals";
-import { serverApi } from "../../../lib/config";
+import { serverApi, getImageUrl } from "../../../lib/config";
 
 interface NavbarProps {
 	cartItems: CartItem[];
@@ -44,9 +44,7 @@ export default function Navbar(props: NavbarProps) {
 		anchorEl,
 	} = props;
 	const { authMember } = useGlobals();
-	const imagePath = authMember?.memberImage
-		? `${serverApi}/${authMember.memberImage}`
-		: "/icons/user-default.svg";
+	const imagePath = getImageUrl(authMember?.memberImage);
 	return (
 		<div className="navbar">
 			<Container className="navbar-container">

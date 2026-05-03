@@ -9,7 +9,7 @@ import {
 	Star,
 	Visibility,
 } from "@mui/icons-material";
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
 import { ProductStatus } from "../../../lib/enums/product.enum";
 
@@ -45,7 +45,7 @@ export default function PopularProducts(props: PopularProductsProps) {
 				</div>
 				<div className="popular-grid">
 					{popularProducts.map((product) => {
-						const imagePath = `${serverApi}/${product.productImages[0]}`;
+						const imagePath = getImageUrl(product.productImages[0]);
 						return (
 							<div
 								onClick={() => chooseDishHandler(product._id)}

@@ -8,7 +8,7 @@ import { setChosenProduct, setNewProductsSug } from "./slice";
 import { Product } from "../../../lib/types/products";
 import { useDispatch, useSelector } from "react-redux";
 
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 import ProductService from "../../services/ProductService";
 import { retrieveNewProductsSug, retrieveChosenProduct } from "./selector";
 import { CartItem } from "../../../lib/types/search";
@@ -85,7 +85,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 							</div>
 						)}
 						<img
-							src={`${serverApi}/${product?.productImages[0]}`}
+							src={getImageUrl(product?.productImages[0])}
 							alt={""}
 							className="chosen-img"
 						/>
@@ -152,7 +152,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 								onClick={() => chooseDishHandler(product._id)}>
 								<div className="related-img-wrap">
 									<img
-										src={`${serverApi}/${product?.productImages?.[0]}`}
+										src={getImageUrl(product?.productImages?.[0])}
 										alt={""}
 										className="related-img"
 									/>

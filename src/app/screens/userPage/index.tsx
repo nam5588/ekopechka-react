@@ -17,7 +17,7 @@ import {
 	sweetErrorHandling,
 	sweetTopSmallSuccessAlert,
 } from "../../../lib/sweetAlert";
-import { Messages, serverApi } from "../../../lib/config";
+import { Messages, serverApi, getImageUrl } from "../../../lib/config";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
 import MemberService from "../../services/MemberService";
@@ -40,8 +40,7 @@ export default function UserPage() {
 
 	const [previewImage, setPreviewImage] = useState<string>(
 		authMember?.memberImage
-			? `${serverApi}/${authMember.memberImage}`
-			: "/icons/user-default.svg",
+			getImageUrl(authMember.memberImage),
 	);
 
 	/** HANDLERS **/

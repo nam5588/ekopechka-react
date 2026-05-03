@@ -5,7 +5,7 @@ import { FavoriteBorder, Visibility } from "@mui/icons-material";
 import { createSelector } from "@reduxjs/toolkit";
 import { retrievePopularArticles } from "./selector";
 import { useSelector } from "react-redux";
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 
 /** REDUX SLICE & SELECTOR **/
 const popularArticleRetriever = createSelector(
@@ -50,7 +50,7 @@ export default function Events() {
 								onClick={() => chooseArticleHandler(article._id)}>
 								<div className="article-img-wrap">
 									<img
-										src={`${serverApi}/${article.articleImage}`}
+										src={getImageUrl(article.articleImage)}
 										alt={""}
 										className="article-img"
 									/>

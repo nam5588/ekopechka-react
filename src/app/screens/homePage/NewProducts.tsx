@@ -7,7 +7,7 @@ import {
 import { NavLink, useHistory } from "react-router-dom";
 import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 import { retrieveNewProducts } from "./selector";
 import { CartItem } from "../../../lib/types/search";
 import { ProductStatus } from "../../../lib/enums/product.enum";
@@ -45,7 +45,7 @@ export default function NewProducts(props: NewProductsProps) {
 
 				<div className="popular-grid">
 					{newProducts.map((product) => {
-						const imagePath = `${serverApi}/${product.productImages[0]}`;
+						const imagePath = getImageUrl(product.productImages[0]);
 						return (
 							<div
 								onClick={() => chooseDishHandler(product._id)}

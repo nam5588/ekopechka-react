@@ -1,5 +1,11 @@
 export const serverApi: string = `${process.env.REACT_APP_API_URL}`
 
+export const getImageUrl = (path?: string): string => {
+    if (!path) return "/icons/user-default.svg";
+    if (path.startsWith("http")) return path;
+    return `${serverApi}/${path}`;
+};
+
 export const Messages = {
     error1: "Something went wrong!",
     error2: "Please login first!",

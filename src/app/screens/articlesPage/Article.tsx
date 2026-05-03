@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import ArticleService from "../../services/ArticleService";
 import { CalendarToday, Visibility } from "@mui/icons-material";
-import { serverApi } from "../../../lib/config";
+import { getImageUrl } from "../../../lib/config";
 
 const categories = [
 	{ label: "All", value: undefined },
@@ -128,7 +128,7 @@ export default function Articles() {
 								onClick={() => chooseArticleHandler(article._id)}>
 								<div className="article-list-img-wrap">
 									<img
-										src={`${serverApi}/${article.articleImage}`}
+										src={getImageUrl(article.articleImage)}
 										alt={""}
 										className="article-list-img"
 									/>
