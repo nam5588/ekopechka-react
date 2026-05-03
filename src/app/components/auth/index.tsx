@@ -84,9 +84,10 @@ export default function AuthenticationModal({
 			container.appendChild(script);
 		}, 300);
 
+		const containerRef = tgBtnRef.current;
 		return () => {
 			clearTimeout(timer);
-			if (tgBtnRef.current) tgBtnRef.current.innerHTML = "";
+			if (containerRef) containerRef.innerHTML = "";
 			delete (window as T).onTelegramAuth;
 		};
 	}, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
