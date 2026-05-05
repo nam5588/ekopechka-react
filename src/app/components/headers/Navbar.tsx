@@ -196,6 +196,9 @@ export default function Navbar(props: NavbarProps) {
 					)}
 
 					<List disablePadding>
+						<ListItemButton component={NavLink} to="/home" sx={{ background: "#6b8e6f !important;" }} onClick={() => setLoginOpen(true)} className="drawer-nav-item">
+								LOGIN
+						</ListItemButton>
 						<ListItemButton component={NavLink} to="/home" onClick={closeDrawer} className="drawer-nav-item">
 							Home
 						</ListItemButton>
