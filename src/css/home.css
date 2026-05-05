@@ -167,27 +167,51 @@
 		padding: 40px 0;
 	}
 
-	/* Product cards — horizontal scroll on mobile */
-	.popular-grid,
-	.new-products-grid {
-		display: flex !important;
-		overflow-x: auto;
-		scroll-snap-type: x mandatory;
-		gap: 12px;
-		padding-bottom: 8px;
-		-webkit-overflow-scrolling: touch;
+	/* Product cards — 2 column grid on mobile */
+	.popular-grid {
+		display: grid !important;
+		grid-template-columns: repeat(2, 1fr) !important;
+		gap: 12px !important;
 	}
 
-	.popular-grid::-webkit-scrollbar,
-	.new-products-grid::-webkit-scrollbar {
-		display: none;
+	.product-img-wrap {
+		height: 150px;
 	}
 
-	.popular-grid .product-card,
-	.new-products-grid .product-card {
-		min-width: 200px;
-		scroll-snap-align: start;
-		flex-shrink: 0;
+	.product-body {
+		padding: 10px 12px 12px;
+	}
+
+	.product-name {
+		font-size: 0.85rem;
+		margin-bottom: 4px;
+	}
+
+	.product-desc {
+		font-size: 0.78rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		margin-bottom: 8px;
+	}
+
+	.product-price {
+		font-size: 1rem;
+	}
+
+	.product-meta {
+		gap: 8px;
+		margin-bottom: 8px;
+	}
+
+	.product-meta-item {
+		font-size: 0.72rem;
+	}
+
+	.product-add-btn.MuiButton-root {
+		padding: 8px !important;
+		font-size: 0.78rem !important;
 	}
 }
 
