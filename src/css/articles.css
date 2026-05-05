@@ -184,11 +184,44 @@
 @media (max-width: 600px) {
 	.article-list-card {
 		flex-direction: column;
+		padding: 14px;
 	}
 
 	.article-list-img-wrap {
 		width: 100%;
 		height: 180px;
+	}
+}
+
+@media (max-width: 768px) {
+	.articles-hero {
+		padding: 28px 0;
+	}
+
+	.articles-hero-title {
+		font-size: 1.5rem;
+	}
+
+	.articles-content {
+		padding: 24px 0 48px;
+	}
+
+	.articles-search {
+		width: 100%;
+	}
+
+	.chosen-article-card {
+		padding: 20px 16px;
+		border-radius: 14px;
+		margin: 0 12px;
+	}
+
+	.chosen-article-title {
+		font-size: 1.5rem;
+	}
+
+	.chosen-article-img-wrap {
+		height: 220px;
 	}
 }
 /* ===== CHOSEN ARTICLE ===== */

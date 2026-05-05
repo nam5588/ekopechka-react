@@ -97,12 +97,97 @@
 @media (max-width: 768px) {
 	.welcome-inner {
 		flex-direction: column !important;
-		padding: 48px 0;
+		padding: 40px 16px !important;
+		gap: 28px !important;
+		text-align: center;
+	}
+
+	.welcome-txt {
+		max-width: 100%;
+		align-items: center;
+	}
+
+	.welcome-title {
+		font-size: 2rem !important;
+	}
+
+	.welcome-desc {
+		font-size: 0.9rem;
+		max-width: 100%;
+	}
+
+	.welcome-btns {
+		justify-content: center;
+	}
+
+	.welcome-img-box {
+		width: 100%;
+		justify-content: center;
 	}
 
 	.welcome-img {
-		height: 300px;
+		height: 220px;
 		max-width: 100%;
+		border-radius: 14px;
+	}
+
+	/* Statistics */
+	.static-frame {
+		padding: 40px 0;
+	}
+
+	.static-title {
+		font-size: 1.5rem;
+		margin-bottom: 28px;
+	}
+
+	/* Popular/New products */
+	.popular-frame,
+	.new-products-frame {
+		padding: 40px 0;
+	}
+
+	.popular-title,
+	.events-title {
+		font-size: 1.4rem;
+	}
+
+	/* Services */
+	.service-frame {
+		padding: 40px 0;
+	}
+
+	.service-title {
+		font-size: 1.5rem;
+		margin-bottom: 28px;
+	}
+
+	/* Events */
+	.events-frame {
+		padding: 40px 0;
+	}
+
+	/* Product cards — horizontal scroll on mobile */
+	.popular-grid,
+	.new-products-grid {
+		display: flex !important;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		gap: 12px;
+		padding-bottom: 8px;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.popular-grid::-webkit-scrollbar,
+	.new-products-grid::-webkit-scrollbar {
+		display: none;
+	}
+
+	.popular-grid .product-card,
+	.new-products-grid .product-card {
+		min-width: 200px;
+		scroll-snap-align: start;
+		flex-shrink: 0;
 	}
 }
 

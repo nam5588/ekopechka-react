@@ -458,3 +458,50 @@
 		grid-template-columns: 1fr 1fr;
 	}
 }
+
+@media (max-width: 768px) {
+	.products-hero {
+		padding: 28px 0;
+	}
+
+	.products-hero-title {
+		font-size: 1.5rem;
+	}
+
+	.products-content {
+		padding: 24px 0 48px;
+	}
+
+	.products-sidebar {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.products-box {
+		height: auto;
+		min-height: 600px;
+	}
+
+	.chosen-page {
+		padding: 24px 0 48px;
+	}
+
+	.chosen-card {
+		padding: 20px 16px;
+		border-radius: 14px;
+		margin: 0 12px;
+	}
+
+	.chosen-name {
+		font-size: 1.4rem;
+	}
+
+	.chosen-price {
+		font-size: 1.6rem;
+	}
+
+	.chosen-related-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+}

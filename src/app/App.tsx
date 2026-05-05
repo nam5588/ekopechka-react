@@ -8,6 +8,7 @@ import Navber from "./components/headers/Navbar";
 import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import ArticlesPage from "./screens/articlesPage";
+import MobileBottomNav from "./components/MobileBottomNav";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
@@ -60,27 +61,30 @@ function App() {
 				handleLogoutClose={handleLogoutClose}
 				handleLogoutRequest={handleLogoutRequest}
 			/>
-			<Switch>
-				<Route path="/products">
-					<ProductsPage onAdd={onAdd} />
-				</Route>
-				<Route path="/articles">
-					<ArticlesPage />
-				</Route>
-				<Route path="/orders">
-					<OrdersPage />
-				</Route>
-				<Route path="/my-page">
-					<UserPage />
-				</Route>
-				<Route path="/help">
-					<HelpPage />
-				</Route>
-				<Route path="/">
-					<HomePage setSignupOpen={setSignupOpen} onAdd={onAdd} />
-				</Route>
-			</Switch>
-			<Footer />
+			<div className="main-content">
+				<Switch>
+					<Route path="/products">
+						<ProductsPage onAdd={onAdd} />
+					</Route>
+					<Route path="/articles">
+						<ArticlesPage />
+					</Route>
+					<Route path="/orders">
+						<OrdersPage />
+					</Route>
+					<Route path="/my-page">
+						<UserPage />
+					</Route>
+					<Route path="/help">
+						<HelpPage />
+					</Route>
+					<Route path="/">
+						<HomePage setSignupOpen={setSignupOpen} onAdd={onAdd} />
+					</Route>
+				</Switch>
+				<Footer />
+			</div>
+			<MobileBottomNav cartItems={cartItems} />
 			<AuthenticationModal
 				signupOpen={signupOpen}
 				loginOpen={loginOpen}

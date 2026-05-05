@@ -141,6 +141,93 @@
 .user-avatar:hover {
 	border-color: #aaa;
 }
+/* ===== MOBILE: hide desktop links, show hamburger ===== */
+.nav-links-desktop {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.hamburger-btn {
+	display: none !important;
+}
+
+@media (max-width: 768px) {
+	.nav-links-desktop {
+		display: none !important;
+	}
+
+	.hamburger-btn {
+		display: flex !important;
+	}
+
+	.navbar-divider {
+		display: none;
+	}
+}
+
+/* ===== MOBILE DRAWER ===== */
+.mobile-drawer {
+	width: 280px;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+}
+
+.drawer-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 20px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.drawer-brand {
+	font-family: "Playfair Display", serif;
+	font-weight: 700;
+	font-size: 1.2rem;
+	color: #1a1a1a;
+}
+
+.drawer-user {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 20px;
+	background: #f5f0eb;
+	border-bottom: 1px solid #ece8e1;
+}
+
+.drawer-avatar {
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #6b8e6f;
+}
+
+.drawer-username {
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #1a1a1a;
+}
+
+.drawer-nav-item {
+	padding: 14px 20px !important;
+	font-size: 0.95rem !important;
+	font-weight: 500 !important;
+	color: #444 !important;
+	border-bottom: 1px solid #f9f9f9 !important;
+	text-decoration: none;
+}
+
+.drawer-nav-item:hover,
+.drawer-nav-item.active {
+	color: #6b8e6f !important;
+	background: #f5faf5 !important;
+}
+
 /* ===== BASKET ===== */
 .basket-frame {
 	position: relative;

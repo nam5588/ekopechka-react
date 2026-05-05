@@ -214,7 +214,6 @@ export default function AuthenticationModal({
 						}}>
 						<CloseIcon fontSize="small" />
 					</IconButton>
-
 					{/* Title */}
 					<Typography
 						sx={{
@@ -231,7 +230,6 @@ export default function AuthenticationModal({
 							? "Fill in the form to create your account"
 							: "Enter your credentials to access your account"}
 					</Typography>
-
 					{/* Fields */}
 					<Stack gap={2}>
 						<TextField
@@ -281,7 +279,6 @@ export default function AuthenticationModal({
 							}}
 						/>
 					</Stack>
-
 					{/* Submit */}
 					<Button
 						fullWidth
@@ -301,12 +298,11 @@ export default function AuthenticationModal({
 						}}>
 						{isSignup ? "Create Account" : "Sign In"}
 					</Button>
-
 					<Divider sx={{ my: 2, fontSize: "12px", color: "text.secondary" }}>
 						or continue with
 					</Divider>
-
-					<Box ref={tgBtnRef} sx={{ display: "flex", justifyContent: "center" }} />
+					Soon
+					{/* <Box ref={tgBtnRef} sx={{ display: "flex", justifyContent: "center" }} /> */}
 				</Stack>
 			</DialogContent>
 		</Dialog>

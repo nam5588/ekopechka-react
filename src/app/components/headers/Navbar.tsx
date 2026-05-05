@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../css/modal.css";
 
 import {
@@ -9,11 +9,16 @@ import {
 	MenuItem,
 	ListItemIcon,
 	Menu,
+	Drawer,
+	IconButton,
+	List,
+	ListItemButton,
+	Divider,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/types/search";
-import { Logout } from "@mui/icons-material";
+import { Close, Logout, Menu as MenuIcon } from "@mui/icons-material";
 import { useGlobals } from "../../hooks/useGlobals";
 import { getImageUrl } from "../../../lib/config";
 
@@ -45,6 +50,10 @@ export default function Navbar(props: NavbarProps) {
 	} = props;
 	const { authMember } = useGlobals();
 	const imagePath = getImageUrl(authMember?.memberImage);
+	const [drawerOpen, setDrawerOpen] = useState(false);
+
+	const closeDrawer = () => setDrawerOpen(false);
+
 	return (
 		<div className="navbar">
 			<Container className="navbar-container">
@@ -53,52 +62,42 @@ export default function Navbar(props: NavbarProps) {
 					alignItems={"center"}
 					justifyContent={"space-between"}
 					className="navbar-menu">
+
 					<Box className="image-box">
 						<NavLink to={"/home"}>
-							<img
-								className={"brand-logo"}
-								src="/icons/favicon.svg"
-								alt="logo"
-							/>
+							<img className={"brand-logo"} src="/icons/favicon.svg" alt="logo" />
 						</NavLink>
 					</Box>
+
+					{/* Desktop links */}
 					<Stack flexDirection={"row"} className={"links"}>
-						<Box className={"hover-line"}>
-							<NavLink to={"/home"} activeClassName={"underline"}>
-								Home
-							</NavLink>
-						</Box>
-						<Box className={"hover-line"}>
-							<NavLink to={"/products"} activeClassName={"underline"}>
-								Products
-							</NavLink>
-						</Box>
-						<Box className={"hover-line"}>
-							<NavLink to={"/articles"} activeClassName={"underline"}>
-								Articles
-							</NavLink>
-						</Box>
-
-						{authMember ? (
+						<div className="nav-links-desktop">
 							<Box className={"hover-line"}>
-								<NavLink to={"/orders"} activeClassName={"underline"}>
-									Orders
-								</NavLink>
+								<NavLink to={"/home"} activeClassName={"underline"}>Home</NavLink>
 							</Box>
-						) : null}
-
-						{authMember ? (
 							<Box className={"hover-line"}>
-								<NavLink to={"/my-page"} activeClassName={"underline"}>
-									My Page
-								</NavLink>
+								<NavLink to={"/products"} activeClassName={"underline"}>Products</NavLink>
 							</Box>
-						) : null}
-						<Box className={"hover-line"}>
-							<NavLink to={"/help"} activeClassName={"underline"}>
-								Help
-							</NavLink>
-						</Box>
+							<Box className={"hover-line"}>
+								<NavLink to={"/articles"} activeClassName={"underline"}>Articles</NavLink>
+							</Box>
+							{authMember && (
+								<Box className={"hover-line"}>
+									<NavLink to={"/orders"} activeClassName={"underline"}>Orders</NavLink>
+								</Box>
+							)}
+							{authMember && (
+								<Box className={"hover-line"}>
+									<NavLink to={"/my-page"} activeClassName={"underline"}>My Page</NavLink>
+								</Box>
+							)}
+							<Box className={"hover-line"}>
+								<NavLink to={"/help"} activeClassName={"underline"}>Help</NavLink>
+							</Box>
+						</div>
+
+						<Box className="navbar-divider nav-links-desktop" />
+
 						<Basket
 							onAdd={onAdd}
 							cartItems={cartItems}
@@ -106,6 +105,7 @@ export default function Navbar(props: NavbarProps) {
 							onDeleteAll={onDeleteAll}
 							onDelete={onDelete}
 						/>
+
 						{authMember ? (
 							<Box sx={{ borderRadius: "50%" }}>
 								<img
@@ -119,11 +119,21 @@ export default function Navbar(props: NavbarProps) {
 							</Box>
 						) : (
 							<Button
+								className="nav-links-desktop"
 								onClick={() => setLoginOpen(true)}
 								sx={{ background: "#6b8e6f !important;" }}>
 								LOGIN
 							</Button>
 						)}
+
+						{/* Hamburger — only on mobile */}
+						<IconButton
+							className="hamburger-btn"
+							onClick={() => setDrawerOpen(true)}
+							sx={{ ml: 1 }}>
+							<MenuIcon />
+						</IconButton>
+
 						<Menu
 							anchorEl={anchorEl}
 							id="account-menu"
@@ -136,12 +146,7 @@ export default function Navbar(props: NavbarProps) {
 									overflow: "visible",
 									filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
 									mt: 1.5,
-									"& .MuiAvatar-root": {
-										width: 32,
-										height: 32,
-										ml: -0.5,
-										mr: 1,
-									},
+									"& .MuiAvatar-root": { width: 32, height: 32, ml: -0.5, mr: 1 },
 									"&:before": {
 										content: '""',
 										display: "block",
@@ -168,6 +173,77 @@ export default function Navbar(props: NavbarProps) {
 					</Stack>
 				</Stack>
 			</Container>
+
+			{/* Mobile Drawer */}
+			<Drawer anchor="right" open={drawerOpen} onClose={closeDrawer}>
+				<Box className="mobile-drawer">
+					<Box className="drawer-header">
+						<span className="drawer-brand">EkoPechka</span>
+						<IconButton onClick={closeDrawer} size="small">
+							<Close />
+						</IconButton>
+					</Box>
+
+					{authMember && (
+						<Box className="drawer-user">
+							<img
+								src={imagePath}
+								alt="avatar"
+								className="drawer-avatar"
+							/>
+							<span className="drawer-username">{authMember.memberNick}</span>
+						</Box>
+					)}
+
+					<List disablePadding>
+						<ListItemButton component={NavLink} to="/home" onClick={closeDrawer} className="drawer-nav-item">
+							Home
+						</ListItemButton>
+						<ListItemButton component={NavLink} to="/products" onClick={closeDrawer} className="drawer-nav-item">
+							Products
+						</ListItemButton>
+						<ListItemButton component={NavLink} to="/articles" onClick={closeDrawer} className="drawer-nav-item">
+							Articles
+						</ListItemButton>
+						{authMember && (
+							<ListItemButton component={NavLink} to="/orders" onClick={closeDrawer} className="drawer-nav-item">
+								Orders
+							</ListItemButton>
+						)}
+						{authMember && (
+							<ListItemButton component={NavLink} to="/my-page" onClick={closeDrawer} className="drawer-nav-item">
+								My Page
+							</ListItemButton>
+						)}
+						<ListItemButton component={NavLink} to="/help" onClick={closeDrawer} className="drawer-nav-item">
+							Help
+						</ListItemButton>
+					</List>
+
+					<Divider sx={{ mt: "auto" }} />
+
+					{!authMember ? (
+						<Box sx={{ p: 2 }}>
+							<Button
+								fullWidth
+								onClick={() => { setLoginOpen(true); closeDrawer(); }}
+								sx={{ background: "#6b8e6f", color: "#fff", borderRadius: "10px", textTransform: "none", fontWeight: 600, "&:hover": { background: "#5a7a5e" } }}>
+								Login
+							</Button>
+						</Box>
+					) : (
+						<Box sx={{ p: 2 }}>
+							<Button
+								fullWidth
+								onClick={() => { handleLogoutRequest(); closeDrawer(); }}
+								variant="outlined"
+								sx={{ borderColor: "#e5e5e5", color: "#555", borderRadius: "10px", textTransform: "none", fontWeight: 600 }}>
+								Logout
+							</Button>
+						</Box>
+					)}
+				</Box>
+			</Drawer>
 		</div>
 	);
 }

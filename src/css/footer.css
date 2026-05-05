@@ -1,0 +1,6 @@
+@media (max-width: 768px) {
+	/* Footer hides on very small screens since bottom nav replaces navigation */
+	footer .footer-grid-mobile-hide {
+		display: none;
+	}
+}
