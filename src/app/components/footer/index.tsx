@@ -1,5 +1,5 @@
 import React from "react";
-import { Instagram, Mail, Phone, Telegram, YouTube } from "@mui/icons-material";
+import { Instagram, Mail, Phone, Telegram, Verified, YouTube } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
@@ -157,6 +157,29 @@ const SocialIcons = styled.div`
 	}
 `;
 
+const PatentBadge = styled.a`
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 14px;
+	padding: 6px 12px;
+	border: 1px solid #6b8e6f;
+	border-radius: 20px;
+	color: #6b8e6f;
+	font-size: 0.8rem;
+	text-decoration: none;
+	transition: background 0.2s ease, color 0.2s ease;
+
+	svg {
+		font-size: 1rem !important;
+	}
+
+	&:hover {
+		background: #6b8e6f;
+		color: #fff;
+	}
+`;
+
 const Copyright = styled.div`
 	padding-top: 24px;
 	text-align: center;
@@ -187,6 +210,10 @@ export default function Footer() {
 							Sustainable products for a better tomorrow. Shop eco-friendly
 							items that make a difference.
 						</BrandDesc>
+						<PatentBadge href="/img/patent-certificate.pdf" target="_blank" rel="noreferrer">
+							<Verified />
+							Patented Product
+						</PatentBadge>
 					</div>
 
 					{/* Quick Links */}
@@ -211,6 +238,11 @@ export default function Footer() {
 							)}
 							<li>
 								<NavLink to="/help">Help</NavLink>
+							</li>
+							<li>
+								<a href="/img/patent-certificate.pdf" target="_blank" rel="noreferrer">
+									Patent Certificate
+								</a>
 							</li>
 						</LinkList>
 					</div>
