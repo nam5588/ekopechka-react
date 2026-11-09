@@ -9,7 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useHistory } from "react-router-dom"; // hook useHistory
 import { CartItem } from "../../../lib/types/search";
 import { Messages, getImageUrl } from "../../../lib/config";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrderService";
 import { useTranslation } from "../../i18n/LanguageContext";
@@ -61,6 +61,7 @@ export default function Basket(props: BasketProps) {
 			setOrderBuilder(new Date());
 
 			history.push("/orders");
+			sweetTopSuccessAlert(t.orders.created, 3000).then();
 		} catch (err) {
 			console.log(err);
 			sweetErrorHandling(err).then();

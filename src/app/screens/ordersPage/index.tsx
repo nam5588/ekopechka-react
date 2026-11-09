@@ -17,13 +17,12 @@ import OrderService from "../../services/OrderService";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import { retrieveOrders } from "./selector";
 import { Product } from "../../../lib/types/products";
-import { Messages, serverApi } from "../../../lib/config";
+import { AdminContacts, Messages } from "../../../lib/config";
+import Swal from "sweetalert2";
 import {
 	sweetErrorHandling,
 	sweetTopSuccessAlert,
 } from "../../../lib/sweetAlert";
-import { T } from "../../../lib/types/common";
-import axios from "axios";
 import { useTranslation } from "../../i18n/LanguageContext";
 
 function StepIcon({ icon, done }: { icon: string; done: boolean }) {
@@ -81,30 +80,30 @@ export default function OrdersPage() {
 	}, []);
 
 	/** HANDLERS **/
-	const finishedOrderHandler = async (e: T) => {
-		try {
-			if (!authMember) throw new Error(Messages.error2);
-			const orderId = e.target.value;
-
-			const confirmation = window.confirm(t.orders.confirmPay);
-			if (confirmation) {
-				const order = orders.find((o: Order) => o._id === orderId);
-				if (!order) throw new Error(t.orders.notFound);
-
-				const res = await axios.post(
-					`${serverApi}/api/stripe/create-session`,
-					{
-						orderId: orderId,
-						amount: order.orderTotal,
-						orderName: `EkoPechka Order`,
-					},
-				);
-				window.location.href = res.data.url;
-			}
-		} catch (err) {
-			console.log(err);
-			sweetErrorHandling(err).then();
+	// Payment is handled by the admin directly (Stripe disabled): show contacts
+	const paymentContactHandler = (order: Order) => {
+		if (!authMember) {
+			sweetErrorHandling(Messages.error2).then();
+			return;
 		}
+		const orderNo = `ORD-${order._id.slice(0, 10)}`;
+		const btn = (href: string, label: string, bg: string) =>
+			`<a href="${href}" target="_blank" rel="noreferrer" style="display:block;padding:12px;margin:8px 0;border-radius:10px;background:${bg};color:#fff;text-decoration:none;font-weight:600">${label}</a>`;
+
+		Swal.fire({
+			title: t.orders.payTitle,
+			html:
+				`<p style="margin:0 0 12px">${t.orders.payDesc(orderNo, order.orderTotal)}</p>` +
+				AdminContacts.phones
+					.map((p) => btn(`tel:${p.replace(/[^+\d]/g, "")}`, `📞 ${t.orders.payCall}: <bdi>${p}</bdi>`, "#6b8e6f"))
+					.join("") +
+				btn(AdminContacts.telegram, `✈️ ${t.orders.payTelegram}`, "#229ED9") +
+				btn(`mailto:${AdminContacts.email}?subject=${encodeURIComponent(orderNo)}`, `✉️ ${t.orders.payEmail}: ${AdminContacts.email}`, "#555") +
+				`<p style="margin:12px 0 0;font-size:13px;color:#666">${t.orders.payNote}</p>`,
+			showConfirmButton: true,
+			confirmButtonText: t.orders.close,
+			confirmButtonColor: "#333",
+		});
 	};
 	return (
 		<div className="orders-page">
@@ -259,9 +258,8 @@ export default function OrdersPage() {
 								<div className="order-actions">
 									{order.orderStatus === OrderStatus.PAUSE ? (
 										<Button
-											onClick={finishedOrderHandler}
+											onClick={() => paymentContactHandler(order)}
 											className="order-btn-track"
-											value={order._id}
 											fullWidth>
 											{t.orders.pay}
 										</Button>

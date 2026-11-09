@@ -18,3 +18,10 @@ export const Messages = {
     get error4() { return msg().error4; },
     get error5() { return msg().error5; },
 }
+
+/** Admin contacts shown to customers for payment (Stripe is disabled). */
+export const AdminContacts = {
+    phones: ["+998 93 491-7500", "+998 93 491-7501"],
+    telegram: "https://t.me/ekopechka",
+    email: "mukhammad5589@gmail.com",
+};
