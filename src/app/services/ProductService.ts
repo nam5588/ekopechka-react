@@ -1,3 +1,4 @@
+import { getVisitorId } from "../../lib/visitor";
 import axios from "axios";
 import { serverApi } from "../../lib/config";
 import { Product, ProductInquiry } from "../../lib/types/products";
@@ -24,7 +25,10 @@ class ProductService {
 	public async getProduct(id: string): Promise<Product> {
 		try {
 			let url = `${this.path}/product/${id}`;
-			const result = await axios.get(url, { withCredentials: true });
+			const result = await axios.get(url, {
+				withCredentials: true,
+				headers: { "x-visitor-id": getVisitorId() },
+			});
 			return result.data;
 		} catch (err) {
 			console.log("Error, getProduct", err);

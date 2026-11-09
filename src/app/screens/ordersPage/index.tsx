@@ -57,13 +57,14 @@ export default function OrdersPage() {
 	});
 
 	useEffect(() => {
+		if (!authMember) return;
 		const order = new OrderService();
 		order
 			.getMyOrders({ ...orderInquiry })
 			.then((data) => setOrders(data))
 			.catch((err) => console.log(err));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [orderInquiry, orderBuilder]);
+	}, [orderInquiry, orderBuilder, authMember]);
 
 	useEffect(() => {
 		if (!authMember) history.push("/");

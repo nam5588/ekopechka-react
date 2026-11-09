@@ -45,13 +45,13 @@ class MemberService {
 	public async logout(): Promise<void> {
 		try {
 			const url = `${this.path}/member/logout`;
-			const result = await axios.post(url, {}, { withCredentials: true });
-			console.log(result);
+			await axios.post(url, {}, { withCredentials: true });
+		} catch (err) {
+			// Even if the server call fails, the local session must end
+			console.log("Error, logout", err);
+		} finally {
 			localStorage.removeItem("memberData");
 			localStorage.removeItem("accessToken");
-		} catch (err) {
-			console.log("Error, logout", err);
-			throw err;
 		}
 	}
 	public async updateMember(input: MemberUpdateInput): Promise<Member> {
