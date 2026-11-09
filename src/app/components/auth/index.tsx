@@ -68,6 +68,8 @@ export default function AuthenticationModal({
 				setAuthMember(member);
 				handleClose();
 			} catch (err) {
+				// Close the dialog first so the error popup is visible above it
+				handleClose();
 				sweetErrorHandling(err).then();
 			}
 		};
@@ -300,8 +302,10 @@ export default function AuthenticationModal({
 					<Divider sx={{ my: 2, fontSize: "12px", color: "text.secondary" }}>
 						{t.auth.orContinue}
 					</Divider>
-					{t.auth.soon}
-					{/* <Box ref={tgBtnRef} sx={{ display: "flex", justifyContent: "center" }} /> */}
+					<Box
+						ref={tgBtnRef}
+						sx={{ display: "flex", justifyContent: "center", minHeight: "40px" }}
+					/>
 				</Stack>
 			</DialogContent>
 		</Dialog>
