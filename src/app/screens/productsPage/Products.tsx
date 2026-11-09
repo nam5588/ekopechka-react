@@ -201,7 +201,9 @@ export default function Products(props: ProductsProps) {
 														</p>
 														<div className="product-price-row">
 															<span className="product-price">
-																${product.productPrice}
+																{product.productPrice > 0
+																	? `$${product.productPrice}`
+																	: t.common.priceOnRequest}
 															</span>
 															<span className="product-rating">
 																<Star className="star-icon" />
@@ -215,7 +217,17 @@ export default function Products(props: ProductsProps) {
 																{product.productViews}
 															</span>
 														</div>
-														{product.productStatus !== ProductStatus.SOLDOUT ? (
+														{product.productPrice <= 0 ? (
+															<Button
+																onClick={(e) => {
+																	e.stopPropagation();
+																	history.push("/help?tab=contact");
+																}}
+																className="product-add-btn"
+																fullWidth>
+																{t.common.contactUs}
+															</Button>
+														) : product.productStatus !== ProductStatus.SOLDOUT ? (
 															<Button
 																onClick={(e) => {
 																	console.log("BUTTON PRESSED");

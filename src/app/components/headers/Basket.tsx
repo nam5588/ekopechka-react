@@ -32,7 +32,9 @@ export default function Basket(props: BasketProps) {
 		(a: number, c: CartItem) => a + c.quantity * c.price,
 		0,
 	);
-	const shippingCoast: number = itemsPrice < 100 ? 5 : 0;
+	// Must match backend Order.service: delivery $10 when items total < $600
+	const FREE_DELIVERY_FROM = 600;
+	const shippingCoast: number = itemsPrice < FREE_DELIVERY_FROM ? 10 : 0;
 	const totalPrice = (itemsPrice + shippingCoast).toFixed(1);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -177,7 +179,7 @@ export default function Basket(props: BasketProps) {
 									}}>
 									{shippingCoast === 0
 										? t.basket.free
-										: t.basket.spendMore(100 - itemsPrice)}
+										: t.basket.spendMore(FREE_DELIVERY_FROM - itemsPrice)}
 								</span>
 							</Stack>
 							<Button

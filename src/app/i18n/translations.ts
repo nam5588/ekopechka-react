@@ -43,6 +43,8 @@ const en = {
 		viewAll: "View All →",
 		readAll: "Read All →",
 		inStock: "In Stock",
+		priceOnRequest: "Price on request",
+		contactUs: "Contact us",
 	},
 	basket: {
 		empty: "Cart is empty!",
@@ -330,6 +332,8 @@ const uz: Dict = {
 		viewAll: "Barchasi →",
 		readAll: "Barchasini o'qish →",
 		inStock: "Omborda bor",
+		priceOnRequest: "Narxi kelishiladi",
+		contactUs: "Bog'lanish",
 	},
 	basket: {
 		empty: "Savat bo'sh!",
@@ -615,6 +619,8 @@ const ru: Dict = {
 		viewAll: "Смотреть все →",
 		readAll: "Читать все →",
 		inStock: "В наличии",
+		priceOnRequest: "Цена по запросу",
+		contactUs: "Связаться",
 	},
 	basket: {
 		empty: "Корзина пуста!",
@@ -900,6 +906,8 @@ const fa: Dict = {
 		viewAll: "← دیدن همه",
 		readAll: "← خواندن همه",
 		inStock: "موجود است",
+		priceOnRequest: "قیمت توافقی",
+		contactUs: "تماس با ما",
 	},
 	basket: {
 		empty: "سبد خرید خالی است!",

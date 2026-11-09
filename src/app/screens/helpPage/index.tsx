@@ -247,7 +247,10 @@ function ContactContent() {
 // ─── MAIN PAGE ───────────────────────────────────────────────────────────────
 
 export default function HelpPage() {
-	const [activeTab, setActiveTab] = useState(0);
+	const [activeTab, setActiveTab] = useState(() => {
+		const tab = new URLSearchParams(window.location.search).get("tab");
+		return tab === "contact" ? 2 : tab === "terms" ? 1 : 0;
+	});
 	const { t } = useTranslation();
 
 	return (

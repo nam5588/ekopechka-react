@@ -74,7 +74,9 @@ export default function PopularProducts(props: PopularProductsProps) {
 									<p className="product-desc">{product.productDesc}</p>
 									<div className="product-price-row">
 										<span className="product-price">
-											${product.productPrice}
+											{product.productPrice > 0
+												? `$${product.productPrice}`
+												: t.common.priceOnRequest}
 										</span>
 										<span className="product-rating">
 											<Star className="star-icon" />
@@ -87,7 +89,17 @@ export default function PopularProducts(props: PopularProductsProps) {
 											<Visibility fontSize="small" /> {product.productViews}
 										</span>
 									</div>
-									{product.productStatus !== ProductStatus.SOLDOUT ? (
+									{product.productPrice <= 0 ? (
+										<Button
+											onClick={(e) => {
+												e.stopPropagation();
+												history.push("/help?tab=contact");
+											}}
+											className="product-add-btn"
+											fullWidth>
+											{t.common.contactUs}
+										</Button>
+									) : product.productStatus !== ProductStatus.SOLDOUT ? (
 										<Button
 											onClick={(e) => {
 												console.log("BUTTON PRESSED");

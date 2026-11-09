@@ -98,7 +98,11 @@ export default function ChosenProduct(props: ChosenProductProps) {
 						<p className="chosen-desc">{product?.productDesc}</p>
 
 						<div className="chosen-price-row">
-							<span className="chosen-price">${product?.productPrice}</span>
+							<span className="chosen-price">
+								{product.productPrice > 0
+									? `$${product.productPrice}`
+									: t.common.priceOnRequest}
+							</span>
 						</div>
 
 						<div className="chosen-stock">
@@ -119,7 +123,16 @@ export default function ChosenProduct(props: ChosenProductProps) {
 							</span>
 						</div>
 
-						{!productSoldout && (
+						{product.productPrice <= 0 && (
+							<Button
+								className="chosen-btn-cart"
+								fullWidth
+								onClick={() => history.push("/help?tab=contact")}>
+								{t.common.contactUs}
+							</Button>
+						)}
+
+						{!productSoldout && product.productPrice > 0 && (
 							<Button
 								className="chosen-btn-cart"
 								fullWidth
@@ -163,7 +176,9 @@ export default function ChosenProduct(props: ChosenProductProps) {
 									<h4 className="related-name">{product.productName}</h4>
 									<div className="related-bottom">
 										<span className="related-price">
-											${product.productPrice}
+											{product.productPrice > 0
+												? `$${product.productPrice}`
+												: t.common.priceOnRequest}
 										</span>
 										<span className="related-price">
 											{t.products.inStockCount(product.productLeftCount)}
