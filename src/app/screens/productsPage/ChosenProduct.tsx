@@ -13,6 +13,7 @@ import ProductService from "../../services/ProductService";
 import { retrieveNewProductsSug, retrieveChosenProduct } from "./selector";
 import { CartItem } from "../../../lib/types/search";
 import { ProductStatus } from "../../../lib/enums/product.enum";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 const actionDispatch = (dispatch: Dispatch) => ({
 	setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
@@ -44,6 +45,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 	const { newProductsSug } = useSelector(newProductsSugRetriever);
 	const { productId } = useParams<{ productId: string }>();
 	const history = useHistory();
+	const { t } = useTranslation();
 	useEffect(() => {
 		const product = new ProductService();
 		product
@@ -73,7 +75,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 				<button
 					className="chosen-back"
 					onClick={() => history.push("/products")}>
-					<ArrowBack fontSize="small" /> Back to Products
+					<ArrowBack fontSize="small" /> {t.products.backToProducts}
 				</button>
 
 				{/* Main */}
@@ -81,7 +83,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 					<div className="chosen-img-wrap">
 						{productSoldout && (
 							<div className="sold-out">
-								<span>Sold Out</span>
+								<span>{t.common.soldOut}</span>
 							</div>
 						)}
 						<img
@@ -101,7 +103,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
 						<div className="chosen-stock">
 							<CheckCircleOutline fontSize="small" />
-							{productSoldout ? "Sold Out" : "In Stock"}
+							{productSoldout ? t.common.soldOut : t.common.inStock}
 						</div>
 
 						<div className="chosen-divider" />
@@ -109,11 +111,11 @@ export default function ChosenProduct(props: ChosenProductProps) {
 						<div className="chosen-meta">
 							<span className="chosen-meta-item">
 								<Inventory2OutlinedIcon fontSize="small" />
-								{product?.productLeftCount} left
+								{t.products.left(product.productLeftCount)}
 							</span>
 							<span className="chosen-meta-item">
 								<Visibility fontSize="small" />
-								{product?.productViews} views
+								{t.products.views(product.productViews)}
 							</span>
 						</div>
 
@@ -131,7 +133,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 									});
 									e.stopPropagation();
 								}}>
-								Add to Cart
+								{t.common.addToCart}
 							</Button>
 						)}
 					</div>
@@ -142,7 +144,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
 				<div className="chosen-related">
 					<h2 className="chosen-related-title">
-						You might also like our popular products
+						{t.products.related}
 					</h2>
 					<div className="chosen-related-grid">
 						{newProductsSug.map((product) => (
@@ -164,7 +166,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
 											${product.productPrice}
 										</span>
 										<span className="related-price">
-											In Stock: {product.productLeftCount}
+											{t.products.inStockCount(product.productLeftCount)}
 										</span>
 									</div>
 								</div>

@@ -24,6 +24,7 @@ import {
 } from "../../../lib/sweetAlert";
 import { T } from "../../../lib/types/common";
 import axios from "axios";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 function StepIcon({ icon, done }: { icon: string; done: boolean }) {
 	return (
@@ -48,6 +49,7 @@ export default function OrdersPage() {
 	const { orders } = useSelector(ordersRetriever);
 	const { orderBuilder, authMember } = useGlobals();
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [orderInquiry] = useState<OrderInquiry>({
 		page: 1,
@@ -71,9 +73,10 @@ export default function OrdersPage() {
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
 		if (params.get("payment") === "success") {
-			sweetTopSuccessAlert("Your order has been paid successfully! 🎉");
+			sweetTopSuccessAlert(t.orders.paidSuccess);
 			window.history.replaceState({}, "", "/orders");
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	/** HANDLERS **/
@@ -82,12 +85,10 @@ export default function OrdersPage() {
 			if (!authMember) throw new Error(Messages.error2);
 			const orderId = e.target.value;
 
-			const confirmation = window.confirm(
-				"Do you want to process with payment?",
-			);
+			const confirmation = window.confirm(t.orders.confirmPay);
 			if (confirmation) {
 				const order = orders.find((o: Order) => o._id === orderId);
-				if (!order) throw new Error("Order not found");
+				if (!order) throw new Error(t.orders.notFound);
 
 				const res = await axios.post(
 					`${serverApi}/api/stripe/create-session`,
@@ -109,8 +110,8 @@ export default function OrdersPage() {
 			{/* Hero */}
 			<div className="orders-hero">
 				<Container>
-					<h1 className="orders-hero-title">My Orders</h1>
-					<p className="orders-hero-desc">Track and manage your orders</p>
+					<h1 className="orders-hero-title">{t.orders.heroTitle}</h1>
+					<p className="orders-hero-desc">{t.orders.heroDesc}</p>
 				</Container>
 			</div>
 
@@ -120,13 +121,10 @@ export default function OrdersPage() {
 					{orders.length === 0 && (
 						<div className="orders-empty">
 							<LocalShippingOutlined className="orders-empty-icon" />
-							<h3>No orders yet</h3>
-							<p>
-								Looks like you haven't placed any orders. Explore our
-								eco-friendly products and make your first order!
-							</p>
+							<h3>{t.orders.emptyTitle}</h3>
+							<p>{t.orders.emptyDesc}</p>
 							<a href="/products">
-								<Button className="orders-empty-btn">Let's Shop 🌿</Button>
+								<Button className="orders-empty-btn">{t.orders.letsShop}</Button>
 							</a>
 						</div>
 					)}
@@ -134,16 +132,16 @@ export default function OrdersPage() {
 						const steps = [
 							{
 								icon: "time",
-								label: "Order Placed",
-								sub: new Date(order.createdAt).toLocaleDateString("en-GB"),
+								label: t.orders.placed,
+								sub: new Date(order.createdAt).toLocaleDateString(t.dateLocale),
 								done: true,
 							},
 							{
 								icon: "box",
-								label: "Processing",
+								label: t.orders.processing,
 								sub:
 									order.orderStatus === OrderStatus.PROCESS
-										? "In progress"
+										? t.orders.inProgress
 										: "",
 								done:
 									order.orderStatus === OrderStatus.PROCESS ||
@@ -151,10 +149,10 @@ export default function OrdersPage() {
 							},
 							{
 								icon: "check",
-								label: "Delivered",
+								label: t.orders.delivered,
 								sub:
 									order.orderStatus === OrderStatus.FINISH
-										? new Date(order.updatedAt).toLocaleDateString("en-GB")
+										? new Date(order.updatedAt).toLocaleDateString(t.dateLocale)
 										: "",
 								done: order.orderStatus === OrderStatus.FINISH,
 							},
@@ -165,35 +163,35 @@ export default function OrdersPage() {
 								{/* Header Row */}
 								<div className="order-header-row">
 									<div className="order-header-item">
-										<span className="order-header-label">Order Number</span>
+										<span className="order-header-label">{t.orders.orderNumber}</span>
 										<span className="order-header-value">
 											ORD-{order._id.slice(0, 10)}
 										</span>
 									</div>
 									<div className="order-header-item">
-										<span className="order-header-label">Order Date</span>
+										<span className="order-header-label">{t.orders.orderDate}</span>
 										<span className="order-header-value">
-											{new Date(order.createdAt).toLocaleDateString("en-GB")}
+											{new Date(order.createdAt).toLocaleDateString(t.dateLocale)}
 										</span>
 									</div>
 									<div className="order-header-item">
-										<span className="order-header-label">Total Amount</span>
+										<span className="order-header-label">{t.orders.totalAmount}</span>
 										<span className="order-header-value order-total">
 											${order.orderTotal}
 										</span>
 									</div>
 									<div className="order-header-item">
-										<span className="order-header-label">Status</span>
+										<span className="order-header-label">{t.orders.status}</span>
 										<span className={`order-status-badge ${order.orderStatus}`}>
 											<CheckCircleOutline fontSize="small" />
-											{order.orderStatus}
+											{t.orders.statusNames[order.orderStatus] ?? order.orderStatus}
 										</span>
 									</div>
 								</div>
 
 								{/* Items */}
 								<div className="order-section">
-									<h3 className="order-section-title">Items</h3>
+									<h3 className="order-section-title">{t.orders.items}</h3>
 									<div className="order-items">
 										{order.orderItems.map((item, i) => {
 											const product: Product | undefined =
@@ -208,7 +206,7 @@ export default function OrdersPage() {
 															{product?.productName}
 														</p>
 														<p className="order-item-qty">
-															Quantity: {item.itemQuantity}
+															{t.orders.quantity}: {item.itemQuantity}
 														</p>
 													</div>
 													<span className="order-item-price">
@@ -222,7 +220,7 @@ export default function OrdersPage() {
 
 								{/* Delivery Status */}
 								<div className="order-section">
-									<h3 className="order-section-title">Delivery Status</h3>
+									<h3 className="order-section-title">{t.orders.deliveryStatus}</h3>
 									<div className="order-steps">
 										{steps.map((step, i) => (
 											<React.Fragment key={i}>
@@ -244,11 +242,13 @@ export default function OrdersPage() {
 									<div className="order-delivery-box">
 										<LocalShippingOutlined fontSize="small" />
 										<div>
-											<p className="order-delivery-title">Estimated Delivery</p>
+											<p className="order-delivery-title">{t.orders.estimated}</p>
 											<p className="order-delivery-date">
 												{order.orderStatus === OrderStatus.FINISH
-													? `Delivered on ${new Date(order.updatedAt).toLocaleDateString("en-GB")}`
-													: `Expected soon`}
+													? t.orders.deliveredOn(
+															new Date(order.updatedAt).toLocaleDateString(t.dateLocale),
+														)
+													: t.orders.expectedSoon}
 											</p>
 										</div>
 									</div>
@@ -262,20 +262,20 @@ export default function OrdersPage() {
 											className="order-btn-track"
 											value={order._id}
 											fullWidth>
-											💳 Pay for order
+											{t.orders.pay}
 										</Button>
 									) : order.orderStatus === OrderStatus.PROCESS ? (
 										<Button className="order-btn-track" disabled fullWidth>
-											🔄 Processing
+											{t.orders.processingBtn}
 										</Button>
 									) : (
 										<Button className="order-btn-track" disabled fullWidth>
-											✅ Delivered
+											{t.orders.deliveredBtn}
 										</Button>
 									)}
 									<a href="/help">
 										<Button className="order-btn-support" fullWidth>
-											Contact Support
+											{t.orders.contactSupport}
 										</Button>
 									</a>
 								</div>

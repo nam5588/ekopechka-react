@@ -2,6 +2,7 @@ import React from "react";
 import { Instagram, Mail, Phone, Telegram, Verified, YouTube } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 const Footers = styled.footer`
 	width: 100%;
@@ -193,6 +194,7 @@ const Copyright = styled.div`
 
 export default function Footer() {
 	const authMember = false;
+	const { t } = useTranslation();
 
 	return (
 		<Footers>
@@ -206,42 +208,39 @@ export default function Footer() {
 							</LogoIcon>
 							<BrandName>EkoPechka</BrandName>
 						</BrandLogo>
-						<BrandDesc>
-							Sustainable products for a better tomorrow. Shop eco-friendly
-							items that make a difference.
-						</BrandDesc>
+						<BrandDesc>{t.footer.desc}</BrandDesc>
 						<PatentBadge href="/img/patent-certificate.pdf" target="_blank" rel="noreferrer">
 							<Verified />
-							Patented Product
+							{t.footer.patented}
 						</PatentBadge>
 					</div>
 
 					{/* Quick Links */}
 					<div>
-						<ColTitle>Quick Links</ColTitle>
+						<ColTitle>{t.footer.quickLinks}</ColTitle>
 						<LinkList>
 							<li>
-								<NavLink to="/products">Products</NavLink>
+								<NavLink to="/products">{t.nav.products}</NavLink>
 							</li>
 							<li>
-								<NavLink to="/articles">Articles</NavLink>
+								<NavLink to="/articles">{t.nav.articles}</NavLink>
 							</li>
 							{authMember && (
 								<li>
-									<NavLink to="/orders">Orders</NavLink>
+									<NavLink to="/orders">{t.nav.orders}</NavLink>
 								</li>
 							)}
 							{authMember && (
 								<li>
-									<NavLink to="/my-page">My Page</NavLink>
+									<NavLink to="/my-page">{t.nav.myPage}</NavLink>
 								</li>
 							)}
 							<li>
-								<NavLink to="/help">Help</NavLink>
+								<NavLink to="/help">{t.nav.help}</NavLink>
 							</li>
 							<li>
 								<a href="/img/patent-certificate.pdf" target="_blank" rel="noreferrer">
-									Patent Certificate
+									{t.footer.patentCert}
 								</a>
 							</li>
 						</LinkList>
@@ -249,7 +248,7 @@ export default function Footer() {
 
 					{/* Contact */}
 					<div>
-						<ColTitle>Contact Us</ColTitle>
+						<ColTitle>{t.footer.contactUs}</ColTitle>
 						<ContactList>
 							<ContactItem>
 								<Mail />
@@ -269,7 +268,7 @@ export default function Footer() {
 
 				<Divider>
 					<SocialRow>
-						<p>Follow us on social media</p>
+						<p>{t.footer.follow}</p>
 						<SocialIcons>
 							<a target="_blank" rel="noreferrer" href="https://t.me/s/ekopechka">
 								<Telegram />
@@ -290,8 +289,7 @@ export default function Footer() {
 				<Divider>
 					<Copyright>
 						<p>
-							© {2026} EkoPechka. All rights reserved. | Made with ♻️ for a
-							sustainable future.
+							© {2026} EkoPechka. {t.footer.rights}
 						</p>
 					</Copyright>
 				</Divider>

@@ -12,14 +12,18 @@ import { useHistory } from "react-router-dom";
 import ArticleService from "../../services/ArticleService";
 import { CalendarToday, Visibility } from "@mui/icons-material";
 import { getImageUrl } from "../../../lib/config";
+import { useTranslation } from "../../i18n/LanguageContext";
 
-const categories = [
-	{ label: "All", value: undefined },
-	{ label: "News", value: ArticleCategory.NEWS },
-	{ label: "Advice", value: ArticleCategory.ADVICE },
-	{ label: "Stoves", value: ArticleCategory.STOVE },
-	{ label: "Fuels", value: ArticleCategory.FUEL },
-	{ label: "Others", value: ArticleCategory.OTHER },
+const categories: {
+	key: "all" | "news" | "advice" | "stoves" | "fuels" | "others";
+	value: ArticleCategory | undefined;
+}[] = [
+	{ key: "all", value: undefined },
+	{ key: "news", value: ArticleCategory.NEWS },
+	{ key: "advice", value: ArticleCategory.ADVICE },
+	{ key: "stoves", value: ArticleCategory.STOVE },
+	{ key: "fuels", value: ArticleCategory.FUEL },
+	{ key: "others", value: ArticleCategory.OTHER },
 ];
 
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -34,6 +38,7 @@ export default function Articles() {
 	const { setArticles } = actionDispatch(useDispatch());
 	const { articles } = useSelector(articlesRetriever);
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [articleSearch, setArticleSearch] = useState<ArticleInquiry>({
 		page: 1,
@@ -44,7 +49,7 @@ export default function Articles() {
 	});
 
 	const [searchText, setSearchText] = useState<string>("");
-	const [activeCategory, setActiveCategory] = useState<string>("All");
+	const [activeCategory, setActiveCategory] = useState<string>("all");
 
 	useEffect(() => {
 		const article = new ArticleService();
@@ -84,10 +89,8 @@ export default function Articles() {
 			{/* Hero */}
 			<div className="articles-hero">
 				<Container>
-					<h1 className="articles-hero-title">Articles</h1>
-					<p className="articles-hero-desc">
-						Explore our collection of eco-friendly tips and insights
-					</p>
+					<h1 className="articles-hero-title">{t.articles.heroTitle}</h1>
+					<p className="articles-hero-desc">{t.articles.heroDesc}</p>
 				</Container>
 			</div>
 
@@ -100,24 +103,24 @@ export default function Articles() {
 							{categories.map((cat) => (
 								<button
 									style={{ border: "none" }}
-									key={cat.label}
-									className={`sidebar-cat-item ${activeCategory === cat.label ? "active" : ""}`}
-									onClick={() => categoryHandler(cat.label, cat.value)}>
-									{cat.label}
+									key={cat.key}
+									className={`sidebar-cat-item ${activeCategory === cat.key ? "active" : ""}`}
+									onClick={() => categoryHandler(cat.key, cat.value)}>
+									{t.articles.categories[cat.key]}
 								</button>
 							))}
 						</div>
 						<input
 							className="articles-search"
 							type="text"
-							placeholder="Search articles..."
+							placeholder={t.articles.searchPlaceholder}
 							value={searchText}
 							onChange={(e) => setSearchText(e.target.value)}
 						/>
 					</div>
 
 					{/* Count */}
-					<p className="articles-count">{articles.length} articles found</p>
+					<p className="articles-count">{t.articles.found(articles.length)}</p>
 
 					{/* List */}
 					<div className="articles-list">
@@ -135,7 +138,8 @@ export default function Articles() {
 								</div>
 								<div className="article-list-body">
 									<span className="article-list-category">
-										{article.articleCategory}
+										{t.articles.categoryNames[article.articleCategory?.trim()] ??
+											article.articleCategory}
 									</span>
 									<h3 className="article-list-title">{article.articleTitle}</h3>
 									<p className="article-list-desc">
@@ -144,7 +148,7 @@ export default function Articles() {
 									<div className="article-list-meta">
 										<span className="article-list-meta-item">
 											<CalendarToday fontSize="small" />{" "}
-											{new Date(article.createdAt).toLocaleDateString("en-GB")}
+											{new Date(article.createdAt).toLocaleDateString(t.dateLocale)}
 										</span>
 
 										<span className="article-list-meta-item">

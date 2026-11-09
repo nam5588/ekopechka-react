@@ -22,10 +22,12 @@ import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
 import MemberService from "../../services/MemberService";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 export default function UserPage() {
 	const { authMember, setAuthMember } = useGlobals();
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [editing, setEditing] = useState(false);
 	const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>(
@@ -92,7 +94,7 @@ export default function UserPage() {
 
 			const result = await member.updateMember(memberUpdateInput);
 			setAuthMember(result);
-			await sweetTopSmallSuccessAlert("Modified successfully", 700);
+			await sweetTopSmallSuccessAlert(t.user.modified, 700);
 			setEditing(false);
 		} catch (err) {
 			console.log(err);
@@ -118,8 +120,8 @@ export default function UserPage() {
 			{/* Hero */}
 			<div className="user-hero">
 				<Container>
-					<h1 className="user-hero-title">My Profile</h1>
-					<p className="user-hero-desc">Manage your account information</p>
+					<h1 className="user-hero-title">{t.user.heroTitle}</h1>
+					<p className="user-hero-desc">{t.user.heroDesc}</p>
 				</Container>
 			</div>
 
@@ -136,7 +138,7 @@ export default function UserPage() {
 							/>
 							<h2 className="user-avatar-name">{authMember?.memberNick}</h2>
 							<p className="user-avatar-email">
-								{authMember?.memberDesc ?? "No user description"}
+								{authMember?.memberDesc ?? t.user.noDesc}
 							</p>
 							{!editing && (
 								<Button
@@ -144,7 +146,7 @@ export default function UserPage() {
 									fullWidth
 									startIcon={<EditOutlined />}
 									onClick={() => setEditing(true)}>
-									Edit Profile
+									{t.user.edit}
 								</Button>
 							)}
 						</div>
@@ -153,11 +155,11 @@ export default function UserPage() {
 						{!editing ? (
 							/* ===== VIEW MODE ===== */
 							<div className="user-info-card">
-								<h3 className="user-info-title">Your Information</h3>
+								<h3 className="user-info-title">{t.user.yourInfo}</h3>
 
 								<div className="user-info-field">
 									<div className="user-info-label">
-										<PersonOutline fontSize="small" /> Full Name
+										<PersonOutline fontSize="small" /> {t.user.fullName}
 									</div>
 									<p className="user-info-value">{authMember?.memberNick}</p>
 								</div>
@@ -165,7 +167,7 @@ export default function UserPage() {
 
 								<div className="user-info-field">
 									<div className="user-info-label">
-										<PhoneOutlined fontSize="small" /> Phone Number
+										<PhoneOutlined fontSize="small" /> {t.user.phone}
 									</div>
 									<p className="user-info-value">{authMember?.memberPhone}</p>
 								</div>
@@ -173,31 +175,31 @@ export default function UserPage() {
 
 								<div className="user-info-field">
 									<div className="user-info-label">
-										<ContactsIcon fontSize="small" /> Description
+										<ContactsIcon fontSize="small" /> {t.user.description}
 									</div>
 									<p className="user-info-value">
-										{authMember?.memberDesc ?? "No user description"}
+										{authMember?.memberDesc ?? t.user.noDesc}
 									</p>
 								</div>
 								<div className="user-info-divider" />
 
 								<div className="user-info-field">
 									<div className="user-info-label">
-										<LocationOnOutlined fontSize="small" /> Address
+										<LocationOnOutlined fontSize="small" /> {t.user.address}
 									</div>
 									<p className="user-info-value">
-										{authMember?.memberAddress ?? "No user address"}
+										{authMember?.memberAddress ?? t.user.noAddress}
 									</p>
 								</div>
 							</div>
 						) : (
 							/* ===== EDIT MODE ===== */
 							<div className="user-info-card">
-								<h3 className="user-info-title">Edit Your Information</h3>
+								<h3 className="user-info-title">{t.user.editInfo}</h3>
 
 								<div className="user-form">
 									<div className="user-form-field">
-										<label className="user-form-label">Full Name</label>
+										<label className="user-form-label">{t.user.fullName}</label>
 										<input
 											className="user-form-input"
 											value={memberUpdateInput.memberNick ?? ""}
@@ -206,7 +208,7 @@ export default function UserPage() {
 									</div>
 
 									<div className="user-form-field">
-										<label className="user-form-label">Description</label>
+										<label className="user-form-label">{t.user.description}</label>
 										<input
 											className="user-form-input"
 											value={memberUpdateInput.memberDesc ?? ""}
@@ -215,7 +217,7 @@ export default function UserPage() {
 									</div>
 
 									<div className="user-form-field">
-										<label className="user-form-label">Phone Number</label>
+										<label className="user-form-label">{t.user.phone}</label>
 										<input
 											className="user-form-input"
 											value={memberUpdateInput.memberPhone ?? ""}
@@ -224,7 +226,7 @@ export default function UserPage() {
 									</div>
 
 									<div className="user-form-field">
-										<label className="user-form-label">Address</label>
+										<label className="user-form-label">{t.user.address}</label>
 										<input
 											className="user-form-input"
 											value={memberUpdateInput.memberAddress ?? ""}
@@ -233,10 +235,10 @@ export default function UserPage() {
 									</div>
 
 									<div className="user-form-field">
-										<label className="user-form-label">Upload Image</label>
+										<label className="user-form-label">{t.user.uploadImage}</label>
 										<input
 											className="user-form-input"
-											value="JPG, JPEG, PNG formats only!"
+											value={t.user.formatsOnly}
 											disabled
 										/>
 										<div className="up-del-box">
@@ -260,14 +262,14 @@ export default function UserPage() {
 										fullWidth
 										startIcon={<SaveOutlined />}
 										onClick={handleSave}>
-										Save Changes
+										{t.user.save}
 									</Button>
 									<Button
 										className="user-cancel-btn"
 										fullWidth
 										startIcon={<Close />}
 										onClick={handleCancel}>
-										Cancel
+										{t.user.cancel}
 									</Button>
 								</div>
 							</div>

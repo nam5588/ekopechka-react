@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import ArticleService from "../../services/ArticleService";
 import { useGlobals } from "../../hooks/useGlobals";
 import { CartItem } from "../../../lib/types/search";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -38,6 +39,7 @@ interface HomePageProps {
 export default function HomePage(props: HomePageProps) {
 	const { setSignupOpen, onAdd } = props;
 	const { authMember } = useGlobals();
+	const { t } = useTranslation();
 
 	const { setPopularProducts, setNewProducts, setPopularArticles } =
 		actionDispatch(useDispatch());
@@ -92,14 +94,9 @@ export default function HomePage(props: HomePageProps) {
 						alignItems={"center"}>
 						<Stack className="welcome-txt" flexDirection={"column"}>
 							<h1 className="welcome-title">
-								Welcome to <br /> EkoPechka
+								{t.home.welcomeLine1} <br /> {t.home.welcomeLine2}
 							</h1>
-							<p className="welcome-desc">
-								Discover sustainable, eco-friendly products that make a real
-								difference. From organic clothing to renewable energy solutions,
-								we're committed to helping you live a more sustainable
-								lifestyle.
-							</p>
+							<p className="welcome-desc">{t.home.welcomeDesc}</p>
 							<Stack
 								flexDirection={"row"}
 								gap={"16px"}
@@ -109,16 +106,16 @@ export default function HomePage(props: HomePageProps) {
 										<Button
 											className="btn-shop"
 											onClick={() => setSignupOpen(true)}>
-											SignUp
+											{t.home.signup}
 										</Button>
 									</NavLink>
 								) : (
 									<>
 										<NavLink to={"/products"}>
-											<Button className="btn-shop">Shop Now</Button>
+											<Button className="btn-shop">{t.home.shopNow}</Button>
 										</NavLink>
 										<NavLink to={"/help"}>
-											<Button className="btn-learn">Learn More</Button>
+											<Button className="btn-learn">{t.home.learnMore}</Button>
 										</NavLink>
 									</>
 								)}

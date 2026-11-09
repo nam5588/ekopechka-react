@@ -25,21 +25,22 @@ import "../../../css/home.css";
 import { ProductStatus, ProductType } from "../../../lib/enums/product.enum";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+import { useTranslation } from "../../i18n/LanguageContext";
 
-const categories = [
-	{ label: "All", value: undefined },
-	{ label: "Stoves", value: ProductType.STOVE },
-	{ label: "Boilers", value: ProductType.BOILER },
-	{ label: "Fuels", value: ProductType.FUEL },
-	{ label: "Others", value: ProductType.OTHER },
+const categories: { key: "all" | "stoves" | "boilers" | "fuels" | "others"; value: ProductType | undefined }[] = [
+	{ key: "all", value: undefined },
+	{ key: "stoves", value: ProductType.STOVE },
+	{ key: "boilers", value: ProductType.BOILER },
+	{ key: "fuels", value: ProductType.FUEL },
+	{ key: "others", value: ProductType.OTHER },
 ];
 
-const orderOptions = [
-	{ label: "All", value: "createdAt" },
-	{ label: "Price", value: "productPrice" },
-	{ label: "View", value: "productViews" },
-	{ label: "Like", value: "productLikes" },
-	{ label: "New", value: "createdAt" },
+const orderOptions: { key: "all" | "price" | "view" | "like" | "new"; value: string }[] = [
+	{ key: "all", value: "createdAt" },
+	{ key: "price", value: "productPrice" },
+	{ key: "view", value: "productViews" },
+	{ key: "like", value: "productLikes" },
+	{ key: "new", value: "createdAt" },
 ];
 
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -67,10 +68,11 @@ export default function Products(props: ProductsProps) {
 		productType: undefined,
 	});
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [searchText, setSearchText] = useState<string>("");
-	const [activeCategory, setActiveCategory] = useState<string>("All");
-	const [activeOrder, setActiveOrder] = useState<string>("All");
+	const [activeCategory, setActiveCategory] = useState<string>("all");
+	const [activeOrder, setActiveOrder] = useState<string>("all");
 
 	useEffect(() => {
 		const product = new ProductService();
@@ -114,15 +116,15 @@ export default function Products(props: ProductsProps) {
 					<div className="products-layout">
 						{/* Sidebar */}
 						<aside className="products-sidebar">
-							<h3 className="sidebar-title">Filters</h3>
+							<h3 className="sidebar-title">{t.products.filters}</h3>
 
 							{/* Search */}
 							<div className="sidebar-section">
-								<p className="sidebar-label">SEARCH</p>
+								<p className="sidebar-label">{t.products.search}</p>
 								<input
 									className="sidebar-search"
 									type="text"
-									placeholder="Search products..."
+									placeholder={t.products.searchPlaceholder}
 									value={searchText}
 									onChange={(e) => setSearchText(e.target.value)}
 								/>
@@ -130,14 +132,14 @@ export default function Products(props: ProductsProps) {
 
 							{/* Category */}
 							<div className="sidebar-section">
-								<p className="sidebar-label">CATEGORY</p>
+								<p className="sidebar-label">{t.products.category}</p>
 								<ul className="sidebar-categories">
 									{categories.map((cat) => (
 										<li
-											key={cat.label}
-											className={`sidebar-cat-item ${activeCategory === cat.label ? "active" : ""}`}
-											onClick={() => categoryHandler(cat.label, cat.value)}>
-											{cat.label}
+											key={cat.key}
+											className={`sidebar-cat-item ${activeCategory === cat.key ? "active" : ""}`}
+											onClick={() => categoryHandler(cat.key, cat.value)}>
+											{t.products.categories[cat.key]}
 										</li>
 									))}
 								</ul>
@@ -145,14 +147,14 @@ export default function Products(props: ProductsProps) {
 
 							{/* Order */}
 							<div className="sidebar-section">
-								<p className="sidebar-label">ORDER</p>
+								<p className="sidebar-label">{t.products.order}</p>
 								<ul className="sidebar-categories">
 									{orderOptions.map((opt) => (
 										<li
-											key={opt.label}
-											className={`sidebar-cat-item ${activeOrder === opt.label ? "active" : ""}`}
-											onClick={() => orderHandler(opt.label, opt.value)}>
-											{opt.label}
+											key={opt.key}
+											className={`sidebar-cat-item ${activeOrder === opt.key ? "active" : ""}`}
+											onClick={() => orderHandler(opt.key, opt.value)}>
+											{t.products.orderOptions[opt.key]}
 										</li>
 									))}
 								</ul>
@@ -163,7 +165,7 @@ export default function Products(props: ProductsProps) {
 						<div className="products-main">
 							<div className="products-box">
 								{products.length === 0 ? (
-									<Box className="no-products">Products are not available!</Box>
+									<Box className="no-products">{t.products.notAvailable}</Box>
 								) : (
 									<div className="popular-grid">
 										{products.map((product) => {
@@ -177,7 +179,7 @@ export default function Products(props: ProductsProps) {
 														{product.productStatus ===
 															ProductStatus.SOLDOUT && (
 															<div className="sold-out">
-																<span>Sold Out</span>
+																<span>{t.common.soldOut}</span>
 															</div>
 														)}
 														<img
@@ -187,7 +189,7 @@ export default function Products(props: ProductsProps) {
 														/>
 														<div
 															className={`product-count-badge ${product.productLeftCount <= 10 ? "low" : "enough"}`}>
-															Available: {product.productLeftCount}
+															{t.common.available}: {product.productLeftCount}
 														</div>
 													</div>
 													<div className="product-body">
@@ -228,7 +230,7 @@ export default function Products(props: ProductsProps) {
 																}}
 																className="product-add-btn"
 																fullWidth>
-																Add to Cart
+																{t.common.addToCart}
 															</Button>
 														) : (
 															<Button
@@ -237,7 +239,7 @@ export default function Products(props: ProductsProps) {
 																}}
 																className="product-add-btn"
 																fullWidth>
-																Soon
+																{t.common.soon}
 															</Button>
 														)}
 													</div>

@@ -19,9 +19,11 @@ import { useGlobals } from "./hooks/useGlobals";
 import useBasket from "./hooks/useBasket";
 import MemberService from "./services/MemberService";
 import AuthenticationModal from "./components/auth";
+import { useTranslation } from "./i18n/LanguageContext";
 
 function App() {
 	const { setAuthMember } = useGlobals();
+	const { t } = useTranslation();
 	const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = useBasket();
 	const [signupOpen, setSignupOpen] = useState<boolean>(false);
 	const [loginOpen, setLoginOpen] = useState<boolean>(false);
@@ -39,7 +41,7 @@ function App() {
 		try {
 			const member = new MemberService();
 			await member.logout();
-			await sweetTopSuccessAlert("Success", 700);
+			await sweetTopSuccessAlert(t.common.success, 700);
 			setAuthMember(null);
 		} catch (err) {
 			console.log(err);

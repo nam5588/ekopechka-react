@@ -5,6 +5,7 @@ import Products from "./Products";
 import "../../../css/products.css";
 import { Container } from "@mui/material";
 import { CartItem } from "../../../lib/types/search";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 interface ProductPageProps {
 	onAdd: (item: CartItem) => void;
@@ -13,16 +14,15 @@ interface ProductPageProps {
 export default function ProductsPage(props: ProductPageProps) {
 	const { onAdd } = props;
 	const products = useRouteMatch();
+	const { t } = useTranslation();
 
 	return (
 		<div className="products-page">
 			{/* Hero */}
 			<div className="products-hero">
 				<Container>
-					<h1 className="products-hero-title">Our Products</h1>
-					<p className="products-hero-desc">
-						Discover our collection of sustainable, eco-friendly products
-					</p>
+					<h1 className="products-hero-title">{t.products.heroTitle}</h1>
+					<p className="products-hero-desc">{t.products.heroDesc}</p>
 				</Container>
 			</div>
 			<Switch>

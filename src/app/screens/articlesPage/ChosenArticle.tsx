@@ -17,6 +17,7 @@ import { retrieveChosenArticle } from "./selector";
 import { useDispatch, useSelector } from "react-redux";
 import ArticleService from "../../services/ArticleService";
 import { getImageUrl } from "../../../lib/config";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 const actionDispatch = (dispatch: Dispatch) => ({
 	setChosenArticle: (data: Article) => dispatch(setChosenArticle(data)),
@@ -36,6 +37,7 @@ export default function ChosenArticle() {
 
 	const { articleId } = useParams<{ articleId: string }>();
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [liked, setLiked] = React.useState(false);
 
@@ -65,7 +67,7 @@ export default function ChosenArticle() {
 				<button
 					className="chosen-article-back"
 					onClick={() => history.push("/articles")}>
-					<ArrowBack fontSize="small" /> Back to Articles
+					<ArrowBack fontSize="small" /> {t.articles.back}
 				</button>
 
 				{/* Hero Image */}
@@ -80,20 +82,21 @@ export default function ChosenArticle() {
 				{/* Category + Title + Meta */}
 				<div className="chosen-article-header">
 					<span className="chosen-article-category">
-						{article.articleCategory}
+						{t.articles.categoryNames[article.articleCategory?.trim()] ??
+							article.articleCategory}
 					</span>
 					<h1 className="chosen-article-title">{article.articleTitle}</h1>
 					<div className="chosen-article-meta">
 						<span className="chosen-article-meta-item">
 							<CalendarToday fontSize="small" />{" "}
-							{new Date(article.createdAt).toLocaleDateString("en-GB")}
+							{new Date(article.createdAt).toLocaleDateString(t.dateLocale)}
 						</span>
 						<span className="chosen-article-meta-item">
 							<FavoriteBorder fontSize="small" />
-							{article.articleLikes + (liked ? 1 : 0)} likes
+							{t.articles.likes(article.articleLikes + (liked ? 1 : 0))}
 						</span>
 						<span className="chosen-article-meta-item">
-							<Visibility fontSize="small" /> {article.articleViews} views
+							<Visibility fontSize="small" /> {t.articles.views(article.articleViews)}
 						</span>
 					</div>
 				</div>
@@ -107,24 +110,28 @@ export default function ChosenArticle() {
 				<div className="chosen-article-location-box">
 					<div className="chosen-article-location-title">
 						<LocationOn fontSize="small" />
-						<strong>Location & Contact</strong>
+						<strong>{t.articles.locationContact}</strong>
 					</div>
 					<div className="chosen-article-location-grid">
 						<div>
 							<h3 className="chosen-article-location-heading">
-								EkoPechka Headquarters
+								{t.articles.hq}
 							</h3>
-							<p>Yakkabog' Street</p>
-							<p>Namangan, Xasanobod</p>
-							<p>Uzbekistan</p>
+							{t.articles.addressLines.map((line) => (
+								<p key={line}>{line}</p>
+							))}
 						</div>
 						<div>
 							<h3 className="chosen-article-location-heading">
-								Contact Information
+								{t.articles.contactInfo}
 							</h3>
-							<p>Email: mukhammad5589@gmail.com</p>
-							<p>Phone: +998 93 491-7500</p>
-							<p>Hours: Mon-Fri 9AM-7PM PT</p>
+							<p>
+								{t.articles.email}: <bdi>mukhammad5589@gmail.com</bdi>
+							</p>
+							<p>
+								{t.articles.phone}: <bdi>+998 93 491-7500</bdi>
+							</p>
+							<p>{t.articles.hours}</p>
 						</div>
 					</div>
 				</div>
@@ -136,11 +143,11 @@ export default function ChosenArticle() {
 						fullWidth
 						startIcon={liked ? <Favorite /> : <FavoriteBorder />}
 						onClick={() => setLiked(!liked)}>
-						{liked ? "Liked" : "Like Article"}
+						{liked ? t.articles.liked : t.articles.like}
 					</Button>
 					<a style={{ textDecoration: "none" }} href="https://t.me/s/ekopechka">
 						<Button className="chosen-article-share-btn" fullWidth>
-							More
+							{t.articles.more}
 						</Button>
 					</a>
 				</div>

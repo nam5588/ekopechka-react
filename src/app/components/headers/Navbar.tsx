@@ -21,6 +21,8 @@ import { CartItem } from "../../../lib/types/search";
 import { Close, Logout, Menu as MenuIcon } from "@mui/icons-material";
 import { useGlobals } from "../../hooks/useGlobals";
 import { getImageUrl } from "../../../lib/config";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 interface NavbarProps {
 	cartItems: CartItem[];
@@ -49,6 +51,7 @@ export default function Navbar(props: NavbarProps) {
 		anchorEl,
 	} = props;
 	const { authMember } = useGlobals();
+	const { t } = useTranslation();
 	const imagePath = getImageUrl(authMember?.memberImage);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -73,30 +76,34 @@ export default function Navbar(props: NavbarProps) {
 					<Stack flexDirection={"row"} className={"links"}>
 						<div className="nav-links-desktop">
 							<Box className={"hover-line"}>
-								<NavLink to={"/home"} activeClassName={"underline"}>Home</NavLink>
+								<NavLink to={"/home"} activeClassName={"underline"}>{t.nav.home}</NavLink>
 							</Box>
 							<Box className={"hover-line"}>
-								<NavLink to={"/products"} activeClassName={"underline"}>Products</NavLink>
+								<NavLink to={"/products"} activeClassName={"underline"}>{t.nav.products}</NavLink>
 							</Box>
 							<Box className={"hover-line"}>
-								<NavLink to={"/articles"} activeClassName={"underline"}>Articles</NavLink>
+								<NavLink to={"/articles"} activeClassName={"underline"}>{t.nav.articles}</NavLink>
 							</Box>
 							{authMember && (
 								<Box className={"hover-line"}>
-									<NavLink to={"/orders"} activeClassName={"underline"}>Orders</NavLink>
+									<NavLink to={"/orders"} activeClassName={"underline"}>{t.nav.orders}</NavLink>
 								</Box>
 							)}
 							{authMember && (
 								<Box className={"hover-line"}>
-									<NavLink to={"/my-page"} activeClassName={"underline"}>My Page</NavLink>
+									<NavLink to={"/my-page"} activeClassName={"underline"}>{t.nav.myPage}</NavLink>
 								</Box>
 							)}
 							<Box className={"hover-line"}>
-								<NavLink to={"/help"} activeClassName={"underline"}>Help</NavLink>
+								<NavLink to={"/help"} activeClassName={"underline"}>{t.nav.help}</NavLink>
 							</Box>
 						</div>
 
 						<Box className="navbar-divider nav-links-desktop" />
+
+						<Box className="nav-links-desktop">
+							<LanguageSwitcher />
+						</Box>
 
 						<Basket
 							onAdd={onAdd}
@@ -122,7 +129,7 @@ export default function Navbar(props: NavbarProps) {
 								className="nav-links-desktop"
 								onClick={() => setLoginOpen(true)}
 								sx={{ background: "#6b8e6f !important;" }}>
-								LOGIN
+								{t.nav.login}
 							</Button>
 						)}
 
@@ -167,7 +174,7 @@ export default function Navbar(props: NavbarProps) {
 								<ListItemIcon>
 									<Logout fontSize="small" style={{ color: "blue" }} />
 								</ListItemIcon>
-								Logout
+								{t.nav.logout}
 							</MenuItem>
 						</Menu>
 					</Stack>
@@ -197,31 +204,35 @@ export default function Navbar(props: NavbarProps) {
 
 					<List disablePadding>
 						<ListItemButton component={NavLink} to="/home" sx={{ background: "#6b8e6f !important;" }} onClick={() => setLoginOpen(true)} className="drawer-nav-item">
-								LOGIN
+								{t.nav.login}
 						</ListItemButton>
 						<ListItemButton component={NavLink} to="/home" onClick={closeDrawer} className="drawer-nav-item">
-							Home
+							{t.nav.home}
 						</ListItemButton>
 						<ListItemButton component={NavLink} to="/products" onClick={closeDrawer} className="drawer-nav-item">
-							Products
+							{t.nav.products}
 						</ListItemButton>
 						<ListItemButton component={NavLink} to="/articles" onClick={closeDrawer} className="drawer-nav-item">
-							Articles
+							{t.nav.articles}
 						</ListItemButton>
 						{authMember && (
 							<ListItemButton component={NavLink} to="/orders" onClick={closeDrawer} className="drawer-nav-item">
-								Orders
+								{t.nav.orders}
 							</ListItemButton>
 						)}
 						{authMember && (
 							<ListItemButton component={NavLink} to="/my-page" onClick={closeDrawer} className="drawer-nav-item">
-								My Page
+								{t.nav.myPage}
 							</ListItemButton>
 						)}
 						<ListItemButton component={NavLink} to="/help" onClick={closeDrawer} className="drawer-nav-item">
-							Help
+							{t.nav.help}
 						</ListItemButton>
 					</List>
+
+					<Box sx={{ px: 2, pt: 2 }}>
+						<LanguageSwitcher fullWidth />
+					</Box>
 
 					<Divider sx={{ mt: "auto" }} />
 
@@ -231,7 +242,7 @@ export default function Navbar(props: NavbarProps) {
 								fullWidth
 								onClick={() => { setLoginOpen(true); closeDrawer(); }}
 								sx={{ background: "#6b8e6f", color: "#fff", borderRadius: "10px", textTransform: "none", fontWeight: 600, "&:hover": { background: "#5a7a5e" } }}>
-								Login
+								{t.nav.login}
 							</Button>
 						</Box>
 					) : (
@@ -241,7 +252,7 @@ export default function Navbar(props: NavbarProps) {
 								onClick={() => { handleLogoutRequest(); closeDrawer(); }}
 								variant="outlined"
 								sx={{ borderColor: "#e5e5e5", color: "#555", borderRadius: "10px", textTransform: "none", fontWeight: 600 }}>
-								Logout
+								{t.nav.logout}
 							</Button>
 						</Box>
 					)}

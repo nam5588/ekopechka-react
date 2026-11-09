@@ -435,3 +435,20 @@
 .basket-order .MuiButton-root:hover {
 	background: #3a6040 !important;
 }
+
+/* ===== LANGUAGE SWITCHER ===== */
+.navbar .MuiButton-root.lang-switcher-btn,
+.lang-switcher-btn.MuiButton-root {
+	color: #333 !important;
+	background: transparent !important;
+	border: 1px solid #e5e5e5 !important;
+	padding: 6px 12px !important;
+	text-transform: none !important;
+	letter-spacing: 0 !important;
+}
+
+.navbar .MuiButton-root.lang-switcher-btn:hover,
+.lang-switcher-btn.MuiButton-root:hover {
+	background: #f3f4f1 !important;
+	border-color: #6b8e6f !important;
+}

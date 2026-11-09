@@ -25,6 +25,7 @@ import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 import axios from "axios";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 interface AuthenticationModalProps {
 	signupOpen: boolean;
@@ -44,6 +45,7 @@ export default function AuthenticationModal({
 	const [memberPassword, setMemberPassword] = useState<string>("");
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const { setAuthMember } = useGlobals();
+	const { t } = useTranslation();
 	const tgBtnRef = useRef<HTMLDivElement>(null);
 
 	const isSignup = signupOpen;
@@ -181,14 +183,13 @@ export default function AuthenticationModal({
 								fontWeight: 700,
 								lineHeight: 1.2,
 								letterSpacing: "-0.5px",
+								whiteSpace: "pre-line",
 							}}>
-							{isSignup ? "Create your\naccount" : "Welcome\nback"}
+							{isSignup ? t.auth.createTitle : t.auth.welcomeTitle}
 						</Typography>
 						<Typography
 							sx={{ color: "rgba(255,255,255,0.65)", fontSize: "13px", mt: 1 }}>
-							{isSignup
-								? "Join us and enjoy all features"
-								: "Sign in to continue your journey"}
+							{isSignup ? t.auth.joinDesc : t.auth.signInDesc}
 						</Typography>
 					</Box>
 				</Box>
@@ -223,17 +224,15 @@ export default function AuthenticationModal({
 							mb: 0.5,
 							letterSpacing: "-0.3px",
 						}}>
-						{isSignup ? "Sign Up" : "Sign In"}
+						{isSignup ? t.auth.signUp : t.auth.signIn}
 					</Typography>
 					<Typography sx={{ fontSize: "13px", color: "text.secondary", mb: 3 }}>
-						{isSignup
-							? "Fill in the form to create your account"
-							: "Enter your credentials to access your account"}
+						{isSignup ? t.auth.signupFormDesc : t.auth.loginFormDesc}
 					</Typography>
 					{/* Fields */}
 					<Stack gap={2}>
 						<TextField
-							label="Username"
+							label={t.auth.username}
 							variant="outlined"
 							size="small"
 							fullWidth
@@ -243,7 +242,7 @@ export default function AuthenticationModal({
 
 						{isSignup && (
 							<TextField
-								label="Phone Number"
+								label={t.auth.phone}
 								variant="outlined"
 								size="small"
 								fullWidth
@@ -253,7 +252,7 @@ export default function AuthenticationModal({
 						)}
 
 						<TextField
-							label="Password"
+							label={t.auth.password}
 							variant="outlined"
 							size="small"
 							fullWidth
@@ -296,12 +295,12 @@ export default function AuthenticationModal({
 							backgroundColor: "#111",
 							"&:hover": { backgroundColor: "#333" },
 						}}>
-						{isSignup ? "Create Account" : "Sign In"}
+						{isSignup ? t.auth.createAccount : t.auth.signIn}
 					</Button>
 					<Divider sx={{ my: 2, fontSize: "12px", color: "text.secondary" }}>
-						or continue with
+						{t.auth.orContinue}
 					</Divider>
-					Soon
+					{t.auth.soon}
 					{/* <Box ref={tgBtnRef} sx={{ display: "flex", justifyContent: "center" }} /> */}
 				</Stack>
 			</DialogContent>

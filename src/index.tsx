@@ -11,6 +11,7 @@ import theme from "./app/MaterialTheme";
 import { BrowserRouter as Router } from "react-router-dom";
 import ContextProvider from "./app/context/ContextProvider";
 import { SocketProvider } from "./app/context/SocketContext";
+import { LanguageProvider } from "./app/i18n/LanguageContext";
 import "./css/index.css";
 
 const container = document.getElementById("root")!;
@@ -19,6 +20,7 @@ const root = createRoot(container);
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
+			<LanguageProvider>
 			<ContextProvider>
 				<SocketProvider>
 				<ThemeProvider theme={theme}>
@@ -29,11 +31,9 @@ root.render(
 				</ThemeProvider>
 				</SocketProvider>
 			</ContextProvider>
+			</LanguageProvider>
 		</Provider>
 	</React.StrictMode>,
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

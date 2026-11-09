@@ -12,6 +12,7 @@ import { Messages, getImageUrl } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrderService";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 interface BasketProps {
 	cartItems: CartItem[];
@@ -25,6 +26,7 @@ export default function Basket(props: BasketProps) {
 	const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
 
 	const { authMember, setOrderBuilder } = useGlobals();
+	const { t } = useTranslation();
 	const history = useHistory();
 	const itemsPrice = cartItems.reduce(
 		(a: number, c: CartItem) => a + c.quantity * c.price,
@@ -112,10 +114,10 @@ export default function Basket(props: BasketProps) {
 				<Stack className={"basket-frame"}>
 					<Box className={"all-check-box"}>
 						{cartItems.length === 0 ? (
-							<div>Cart is empty!</div>
+							<div>{t.basket.empty}</div>
 						) : (
 							<Stack flexDirection={"row"}>
-								<div>Cart Products:</div>
+								<div>{t.basket.products}</div>
 								<DeleteForeverIcon
 									sx={{ ml: "5px", cursor: "pointer" }}
 									onClick={() => onDeleteAll()}
@@ -165,7 +167,7 @@ export default function Basket(props: BasketProps) {
 						<Box className={"basket-order"}>
 							<Stack flexDirection={"column"}>
 								<span className={"price"}>
-									Total: ${totalPrice} ({itemsPrice} + {shippingCoast})
+									{t.basket.total}: ${totalPrice} ({itemsPrice} + {shippingCoast})
 								</span>
 								<span
 									style={{
@@ -174,15 +176,15 @@ export default function Basket(props: BasketProps) {
 										fontSize: "14px",
 									}}>
 									{shippingCoast === 0
-										? "Free 🚚"
-										: `Spend $${100 - itemsPrice} for free delivery`}
+										? t.basket.free
+										: t.basket.spendMore(100 - itemsPrice)}
 								</span>
 							</Stack>
 							<Button
 								onClick={proceedOrderHandler}
 								startIcon={<ShoppingCartIcon />}
 								variant={"contained"}>
-								Order
+								{t.basket.order}
 							</Button>
 						</Box>
 					) : (

@@ -12,6 +12,7 @@ import {
 import { getImageUrl } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
 import { ProductStatus } from "../../../lib/enums/product.enum";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 /** REDUX SLICE & SELECTOR **/
 const popularProductRetriever = createSelector(
@@ -26,6 +27,7 @@ interface PopularProductsProps {
 export default function PopularProducts(props: PopularProductsProps) {
 	const { onAdd } = props;
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const { popularProducts } = useSelector(popularProductRetriever);
 
@@ -38,9 +40,9 @@ export default function PopularProducts(props: PopularProductsProps) {
 			<Container>
 				{/* Header */}
 				<div className="popular-header">
-					<h2 className="popular-title">Popular Products</h2>
+					<h2 className="popular-title">{t.home.popularTitle}</h2>
 					<NavLink to={"/products"} className="popular-view-all">
-						View All →
+						{t.common.viewAll}
 					</NavLink>
 				</div>
 				<div className="popular-grid">
@@ -54,7 +56,7 @@ export default function PopularProducts(props: PopularProductsProps) {
 								<div className={`product-img-wrap`}>
 									{product.productStatus === ProductStatus.SOLDOUT && (
 										<div className="sold-out">
-											<span>Sold Out</span>
+											<span>{t.common.soldOut}</span>
 										</div>
 									)}
 									<img
@@ -64,7 +66,7 @@ export default function PopularProducts(props: PopularProductsProps) {
 									/>
 									<div
 										className={`product-count-badge ${product.productLeftCount <= 10 ? "low" : "enough"}`}>
-										Available: {product.productLeftCount}
+										{t.common.available}: {product.productLeftCount}
 									</div>
 								</div>
 								<div className="product-body">
@@ -100,7 +102,7 @@ export default function PopularProducts(props: PopularProductsProps) {
 											}}
 											className="product-add-btn"
 											fullWidth>
-											Add to Cart
+											{t.common.addToCart}
 										</Button>
 									) : (
 										<Button
@@ -109,7 +111,7 @@ export default function PopularProducts(props: PopularProductsProps) {
 											}}
 											className="product-add-btn"
 											fullWidth>
-											Soon
+											{t.common.soon}
 										</Button>
 									)}
 								</div>

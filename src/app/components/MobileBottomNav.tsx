@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { useGlobals } from "../hooks/useGlobals";
 import { CartItem } from "../../lib/types/search";
+import { useTranslation } from "../i18n/LanguageContext";
 
 interface MobileBottomNavProps {
 	cartItems: CartItem[];
@@ -19,6 +20,7 @@ export default function MobileBottomNav({ cartItems }: MobileBottomNavProps) {
 	const history = useHistory();
 	const location = useLocation();
 	const { authMember } = useGlobals();
+	const { t } = useTranslation();
 
 	const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -50,12 +52,12 @@ export default function MobileBottomNav({ cartItems }: MobileBottomNavProps) {
 					},
 				}}>
 				<BottomNavigationAction
-					label="Home"
+					label={t.nav.home}
 					value="/home"
 					icon={<HomeOutlined sx={{ fontSize: "1.5rem" }} />}
 				/>
 				<BottomNavigationAction
-					label="Products"
+					label={t.nav.products}
 					value="/products"
 					icon={
 						<Badge badgeContent={totalCount} color="error" max={9}>
@@ -64,19 +66,19 @@ export default function MobileBottomNav({ cartItems }: MobileBottomNavProps) {
 					}
 				/>
 				<BottomNavigationAction
-					label="Articles"
+					label={t.nav.articles}
 					value="/articles"
 					icon={<ArticleOutlined sx={{ fontSize: "1.5rem" }} />}
 				/>
 				{authMember && (
 					<BottomNavigationAction
-						label="Profile"
+						label={t.nav.profile}
 						value="/my-page"
 						icon={<PersonOutlineOutlined sx={{ fontSize: "1.5rem" }} />}
 					/>
 				)}
 				<BottomNavigationAction
-					label="Help"
+					label={t.nav.help}
 					value="/help"
 					icon={<HelpOutlineOutlined sx={{ fontSize: "1.5rem" }} />}
 				/>

@@ -12,65 +12,19 @@ import {
 import "../../../css/help.css";
 import axios from "axios";
 import { serverApi } from "../../../lib/config";
-
-const faqs = [
-	{
-		q: "What does EkoPechka mean?",
-		a: "EkoPechka combines 'Eco' (ecological) and 'Pechka' (stove in Uzbek), symbolizing warmth and sustainability. We are committed to providing eco-friendly products that warm both your home and the planet.",
-	},
-	{
-		q: "Are all products organic?",
-		a: "Yes, we carefully curate our products to ensure they meet strict organic and eco-friendly standards. Each product is vetted for sustainable sourcing and ethical manufacturing practices.",
-	},
-	{
-		q: "What is your return policy?",
-		a: "We offer a 30-day return policy for all products. Items must be unused and in original packaging. Simply contact our support team to initiate a return.",
-	},
-	{
-		q: "Do you ship internationally?",
-		a: "Yes, we ship to over 50 countries worldwide. International shipping times vary by location, typically 7–14 business days. Free shipping is available for orders over $75.",
-	},
-	{
-		q: "How do you ensure product quality?",
-		a: "Every product goes through a rigorous quality check process. We partner only with certified suppliers and conduct regular audits to ensure our standards are maintained.",
-	},
-];
-
-const terms = [
-	{
-		title: "1. Acceptance of Terms",
-		text: "By accessing and using EkoPechka, you accept and agree to be bound by the terms and provision of this agreement.",
-	},
-	{
-		title: "2. Products and Services",
-		text: "All products listed on EkoPechka are subject to availability. We reserve the right to discontinue any product at any time.",
-	},
-	{
-		title: "3. Privacy Policy",
-		text: "Your privacy is important to us. We collect and use your information only as described in our Privacy Policy, which is incorporated into these Terms.",
-	},
-	{
-		title: "4. Shipping & Delivery",
-		text: "We aim to process all orders within 1–2 business days. Delivery times vary by location and shipping method selected at checkout.",
-	},
-	{
-		title: "5. Returns & Refunds",
-		text: "Items may be returned within 30 days of delivery for a full refund, provided they are unused and in original condition.",
-	},
-];
-
-const tabs = ["FAQ", "Terms & Conditions", "Contact Us"];
+import { useTranslation } from "../../i18n/LanguageContext";
 
 // ─── FAQ ─────────────────────────────────────────────────────────────────────
 
 function FaqAccordion() {
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
+	const { t } = useTranslation();
 
 	return (
 		<div className="help-faq">
-			<h2 className="help-section-title">Frequently Asked Questions</h2>
+			<h2 className="help-section-title">{t.help.faqTitle}</h2>
 			<div className="faq-list">
-				{faqs.map((faq, i) => (
+				{t.help.faqs.map((faq, i) => (
 					<div
 						key={i}
 						className={`faq-item ${openIndex === i ? "open" : ""}`}
@@ -94,15 +48,13 @@ function FaqAccordion() {
 // ─── TERMS ───────────────────────────────────────────────────────────────────
 
 function TermsContent() {
+	const { t } = useTranslation();
 	return (
 		<div className="help-terms">
-			<h2 className="help-section-title">Terms & Conditions</h2>
-			<p className="help-terms-intro">
-				Last updated: March 2024. Please read these terms carefully before using
-				EkoPechka.
-			</p>
+			<h2 className="help-section-title">{t.help.termsTitle}</h2>
+			<p className="help-terms-intro">{t.help.termsIntro}</p>
 			<div className="terms-list">
-				{terms.map((item, i) => (
+				{t.help.terms.map((item, i) => (
 					<div className="terms-item" key={i}>
 						<h4 className="terms-item-title">{item.title}</h4>
 						<p className="terms-item-text">{item.text}</p>
@@ -123,6 +75,7 @@ function ContactContent() {
 	const [form, setForm] = useState(EMPTY_FORM);
 	const [errors, setErrors] = useState<Partial<typeof EMPTY_FORM>>({});
 	const [status, setStatus] = useState<FormStatus>("idle");
+	const { t } = useTranslation();
 
 	const handleChange = (
 		e: React.ChangeEvent<
@@ -138,10 +91,10 @@ function ContactContent() {
 
 	const validate = (): boolean => {
 		const newErrors: Partial<typeof EMPTY_FORM> = {};
-		if (!form.name.trim()) newErrors.name = "* Name is required";
-		if (!form.email.trim()) newErrors.email = "* Email is required";
-		if (!form.subject.trim()) newErrors.subject = "* Subject is required";
-		if (!form.message.trim()) newErrors.message = "* Message is required";
+		if (!form.name.trim()) newErrors.name = t.help.errors.name;
+		if (!form.email.trim()) newErrors.email = t.help.errors.email;
+		if (!form.subject.trim()) newErrors.subject = t.help.errors.subject;
+		if (!form.message.trim()) newErrors.message = t.help.errors.message;
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
@@ -161,32 +114,30 @@ function ContactContent() {
 
 	return (
 		<div className="help-contact">
-			<h2 className="help-section-title">Contact Us</h2>
+			<h2 className="help-section-title">{t.help.contactTitle}</h2>
 			<div className="contact-layout">
 				{/* Info */}
 				<div className="contact-info">
 					<div className="contact-info-item">
 						<MailOutline />
 						<div>
-							<p className="contact-info-label">Email</p>
+							<p className="contact-info-label">{t.help.email}</p>
 							<p className="contact-info-value">mukhammad5589@gmail.com</p>
 						</div>
 					</div>
 					<div className="contact-info-item">
 						<PhoneOutlined />
 						<div>
-							<p className="contact-info-label">Phone</p>
-							<p className="contact-info-value">+998 (93) 491-7500</p>
-							<p className="contact-info-value">+998 (93) 491-7501</p>
+							<p className="contact-info-label">{t.help.phone}</p>
+							<p className="contact-info-value"><bdi>+998 (93) 491-7500</bdi></p>
+							<p className="contact-info-value"><bdi>+998 (93) 491-7501</bdi></p>
 						</div>
 					</div>
 					<div className="contact-info-item">
 						<LocationOnOutlined />
 						<div>
-							<p className="contact-info-label">Address</p>
-							<p className="contact-info-value">
-								Yakkabog' Street, Namangan, Xasanobod, Uzbekistan
-							</p>
+							<p className="contact-info-label">{t.help.address}</p>
+							<p className="contact-info-value">{t.help.addressValue}</p>
 						</div>
 					</div>
 				</div>
@@ -196,25 +147,25 @@ function ContactContent() {
 					{status === "success" && (
 						<div className="contact-status success">
 							<CheckCircleOutline />
-							Message sent! We'll get back to you within 24 hours.
+							{t.help.sent}
 						</div>
 					)}
 					{status === "error" && (
 						<div className="contact-status error">
 							<ErrorOutline />
-							Something went wrong. Please try again.
+							{t.help.error}
 						</div>
 					)}
 
 					<div className="contact-form-row">
 						<div className="contact-form-field">
-							<label className="contact-form-label">Your Name</label>
+							<label className="contact-form-label">{t.help.yourName}</label>
 							<input
 								className={`contact-form-input ${errors.name ? "input-error" : ""}`}
 								name="name"
 								value={form.name}
 								onChange={handleChange}
-								placeholder="Adam Omar"
+								placeholder={t.help.namePh}
 							/>
 							{errors.name && (
 								<span className="input-error-msg">{errors.name}</span>
@@ -222,7 +173,7 @@ function ContactContent() {
 						</div>
 						<div className="contact-form-field">
 							<label className="contact-form-label">
-								Email Address or Telegram Username
+								{t.help.emailLabel}
 							</label>
 							<input
 								className={`contact-form-input ${errors.email ? "input-error" : ""}`}
@@ -239,13 +190,13 @@ function ContactContent() {
 					</div>
 
 					<div className="contact-form-field">
-						<label className="contact-form-label">Subject</label>
+						<label className="contact-form-label">{t.help.subject}</label>
 						<input
 							className={`contact-form-input ${errors.subject ? "input-error" : ""}`}
 							name="subject"
 							value={form.subject}
 							onChange={handleChange}
-							placeholder="How can we help?"
+							placeholder={t.help.subjectPh}
 						/>
 						{errors.subject && (
 							<span className="input-error-msg">{errors.subject}</span>
@@ -253,13 +204,13 @@ function ContactContent() {
 					</div>
 
 					<div className="contact-form-field">
-						<label className="contact-form-label">Message</label>
+						<label className="contact-form-label">{t.help.message}</label>
 						<textarea
 							className={`contact-form-textarea ${errors.message ? "input-error" : ""}`}
 							name="message"
 							value={form.message}
 							onChange={handleChange}
-							placeholder="Write your message here..."
+							placeholder={t.help.messagePh}
 							rows={5}
 						/>
 						{errors.message && (
@@ -271,7 +222,7 @@ function ContactContent() {
 						className="contact-submit-btn"
 						onClick={handleSubmit}
 						disabled={status === "loading"}>
-						{status === "loading" ? "Sending..." : "Send Message"}
+						{status === "loading" ? t.help.sending : t.help.send}
 					</button>
 				</div>
 			</div>
@@ -297,16 +248,15 @@ function ContactContent() {
 
 export default function HelpPage() {
 	const [activeTab, setActiveTab] = useState(0);
+	const { t } = useTranslation();
 
 	return (
 		<div className="help-page">
 			{/* Hero */}
 			<div className="help-hero">
 				<Container>
-					<h1 className="help-hero-title">Help & Support</h1>
-					<p className="help-hero-desc">
-						Get answers to your questions and reach out to us
-					</p>
+					<h1 className="help-hero-title">{t.help.heroTitle}</h1>
+					<p className="help-hero-desc">{t.help.heroDesc}</p>
 				</Container>
 			</div>
 
@@ -314,7 +264,7 @@ export default function HelpPage() {
 			<div className="help-content">
 				<Container>
 					<div className="help-tabs">
-						{tabs.map((tab, i) => (
+						{t.help.tabs.map((tab, i) => (
 							<button
 								key={i}
 								className={`help-tab ${activeTab === i ? "active" : ""}`}

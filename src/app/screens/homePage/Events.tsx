@@ -6,6 +6,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { retrievePopularArticles } from "./selector";
 import { useSelector } from "react-redux";
 import { getImageUrl } from "../../../lib/config";
+import { useTranslation } from "../../i18n/LanguageContext";
 
 /** REDUX SLICE & SELECTOR **/
 const popularArticleRetriever = createSelector(
@@ -16,6 +17,7 @@ const popularArticleRetriever = createSelector(
 export default function Events() {
 	const { popularArticles } = useSelector(popularArticleRetriever);
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const chooseArticleHandler = (id: string) => {
 		history.push(`/articles/${id}`);
@@ -26,16 +28,16 @@ export default function Events() {
 			<Container>
 				{/* Header */}
 				<div className="events-header">
-					<h2 className="events-title">Useful Information</h2>
+					<h2 className="events-title">{t.home.eventsTitle}</h2>
 					<NavLink to={"/articles"} className="events-read-all">
-						Read All →
+						{t.common.readAll}
 					</NavLink>
 				</div>
 
 				{/* Grid */}
 				<div className="events-grid">
 					{popularArticles.map((article) => {
-						const date = new Date(article.createdAt).toLocaleString("en-GB", {
+						const date = new Date(article.createdAt).toLocaleString(t.dateLocale, {
 							year: "numeric",
 							month: "2-digit",
 							day: "2-digit",
@@ -46,6 +48,7 @@ export default function Events() {
 						return (
 							<div
 								id={article._id}
+								key={article._id}
 								className="article-card"
 								onClick={() => chooseArticleHandler(article._id)}>
 								<div className="article-img-wrap">
@@ -57,7 +60,8 @@ export default function Events() {
 								</div>
 								<div className="article-body">
 									<span className="article-category">
-										{article.articleCategory}
+										{t.articles.categoryNames[article.articleCategory?.trim()] ??
+											article.articleCategory}
 									</span>
 									<h3 className="article-name">{article.articleTitle}</h3>
 									<p className="article-desc">

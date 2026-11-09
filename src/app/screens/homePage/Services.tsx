@@ -1,38 +1,20 @@
 import React from "react";
 import { Container } from "@mui/material";
+import { useTranslation } from "../../i18n/LanguageContext";
 
-const services = [
-	{
-		icon: "🚚",
-		title: "Fast Shipping",
-		desc: "Eco-friendly packaging with fast delivery",
-	},
-	{
-		icon: "✔️",
-		title: "Quality Guarantee",
-		desc: "Premium products with lifetime support",
-	},
-	{
-		icon: "🌱",
-		title: "Sustainable",
-		desc: "All products are environmentally friendly",
-	},
-	{
-		icon: "💬",
-		title: "24/7 Support",
-		desc: "Round-the-clock customer service",
-	},
-];
+const icons = ["🚚", "✔️", "🌱", "💬"];
 
 export default function Services() {
+	const { t } = useTranslation();
+
 	return (
 		<div className="service-frame">
 			<Container>
-				<h2 className="service-title">Our Services</h2>
+				<h2 className="service-title">{t.home.servicesTitle}</h2>
 				<div className="service-grid">
-					{services.map((item, i) => (
+					{t.home.services.map((item, i) => (
 						<div className="service-card" key={i}>
-							<span className="service-icon">{item.icon}</span>
+							<span className="service-icon">{icons[i]}</span>
 							<h3 className="service-name">{item.title}</h3>
 							<p className="service-desc">{item.desc}</p>
 						</div>
