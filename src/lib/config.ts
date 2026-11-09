@@ -22,6 +22,6 @@ export const Messages = {
 /** Admin contacts shown to customers for payment (Stripe is disabled). */
 export const AdminContacts = {
     phones: ["+998 93 491-7500", "+998 93 491-7501"],
-    telegram: "https://t.me/ekopechka",
+    telegram: "https://t.me/muhammad731",
     email: "mukhammad5589@gmail.com",
 };
